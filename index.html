@@ -175,12 +175,12 @@
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent flex flex-col justify-end p-4 md:p-6 text-white">
           <div class="flex items-center space-x-2 text-xs text-sky-200 mb-1">
             <span class="px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md">富士五湖 × 冬季東京</span>
-            <span>2026/12/11(五) ～ 12/15(二)</span>
+            <span>2026/12/11(五) ～ 12/18(五)</span>
           </div>
           <h2 class="text-xl md:text-2xl font-bold tracking-tight text-white drop-shadow-sm">
             2026 東京 × 富士山 家族旅行
           </h2>
-          <p class="text-xs text-slate-200 mt-0.5 line-clamp-1">冬の富士山・河口湖溫泉包棟・澀谷百萬夜景・全家溫馨時光</p>
+          <p class="text-xs text-slate-200 mt-0.5 line-clamp-1">冬の富士山・河口湖溫泉包棟・澀谷百萬夜景</p>
         </div>
       </div>
 
@@ -593,13 +593,18 @@
     <!-- ============================================== -->
     <section id="view-attractions" class="view-panel hidden space-y-4">
       
-      <!-- Category Filter Pills -->
-      <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar pb-1" id="attractionCategoryPills">
+      <!-- Category Filter Pills + Add Button -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-1">
+        <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar" id="attractionCategoryPills">
         <button onclick="filterAttractions('all')" class="cat-pill active px-3 py-1.5 rounded-full text-xs font-semibold bg-fuji-700 text-white transition shadow-2xs">全部景點</button>
         <button onclick="filterAttractions('fuji')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition">富士河口湖</button>
         <button onclick="filterAttractions('tokyo')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition">東京市區</button>
         <button onclick="filterAttractions('activity')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition">體驗與滑雪</button>
         <button onclick="filterAttractions('food')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition">美食與餐廳</button>
+        </div>
+        <button onclick="openAttractionEditModal(null)" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-bold shadow-2xs transition shrink-0">
+          ＋ 新增景點 / YT・IG 影片
+        </button>
       </div>
 
       <!-- Attraction Cards Grid -->
@@ -1169,18 +1174,129 @@
   <!-- MODALS: VIDEO PLAYER, MEMBER PICKER, TOAST -->
   <!-- ============================================== -->
   <!-- Video Player Modal -->
-  <div id="videoModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-800">
-      <div class="p-3 bg-slate-950 flex items-center justify-between text-white border-b border-slate-800">
-        <h4 id="videoModalTitle" class="text-xs font-bold truncate">推薦旅遊影片</h4>
-        <button onclick="closeVideoModal()" class="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+  <div id="videoModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeVideoModal()">
+    <div class="bg-slate-900 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-700" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-slate-800">
+        <h3 id="videoModalTitle" class="text-sm font-bold text-white truncate pr-3">影片導覽</h3>
+        <div class="flex items-center space-x-2 shrink-0">
+          <a id="videoExternalLink" href="#" target="_blank" class="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-[11px] font-semibold transition">
+            ↗ 新視窗開啟
+          </a>
+          <button onclick="closeVideoModal()" class="text-slate-400 hover:text-white text-lg leading-none px-1">✕</button>
+        </div>
       </div>
-      <div class="relative pb-[56.25%] h-0 bg-black">
-        <iframe id="videoIframe" class="absolute top-0 left-0 w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div id="videoIframeWrapper" class="aspect-video bg-black relative">
+        <iframe id="videoIframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div id="videoIgFallback" class="hidden p-8 text-center space-y-3 bg-gradient-to-br from-slate-900 to-slate-800">
+        <div class="text-3xl">📱</div>
+        <p class="text-sm font-bold text-white">Instagram 影片 / Reel 連結</p>
+        <p class="text-xs text-slate-300">Instagram 限制網頁內嵌播放，請點擊下方按鈕直接於 Instagram 開啟觀看</p>
+        <a id="videoIgBtn" href="#" target="_blank" class="inline-block px-5 py-2.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white rounded-xl text-xs font-bold shadow-lg transition">
+          前往 Instagram 觀看影片 ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attraction / Video Edit Modal -->
+  <div id="attractionEditModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeAttractionEditModal()">
+    <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 p-5 space-y-3.5" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 id="attModalHeader" class="text-sm font-extrabold text-slate-900">編輯景點與影片連結</h3>
+        <button onclick="closeAttractionEditModal()" class="text-slate-400 hover:text-slate-700 text-lg leading-none">✕</button>
+      </div>
+      <input type="hidden" id="attEditId" value="">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">景點 / 餐廳名稱 *</label>
+          <input type="text" id="attEditName" placeholder="例：大石公園" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-fuji-600">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">分類</label>
+          <select id="attEditCategory" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg bg-slate-50">
+            <option value="fuji">富士河口湖</option>
+            <option value="tokyo">東京市區</option>
+            <option value="activity">體驗與滑雪</option>
+            <option value="food">美食與餐廳</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">日文名稱</label>
+          <input type="text" id="attEditJp" placeholder="例：大石公園" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">費用 / 停留時間</label>
+          <input type="text" id="attEditCost" placeholder="例：免費入園" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+        </div>
+      </div>
+      <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-slate-800 text-[11px]">🖼 景點圖片設定（上傳實景照或貼上圖片網址）</span>
+          <label class="px-2.5 py-1 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-[11px] font-bold cursor-pointer transition">
+            📁 上傳圖片
+            <input type="file" accept="image/*" onchange="handleAttractionImageUpload(event)" class="hidden">
+          </label>
+        </div>
+        <div class="flex items-center space-x-3">
+          <img id="attEditImgPreview" src="" alt="預覽圖片" class="w-24 h-16 object-cover rounded-lg border border-slate-200 bg-slate-200 shrink-0">
+          <div class="flex-1 space-y-1">
+            <input type="text" id="attEditImgUrl" oninput="document.getElementById('attEditImgPreview').src = this.value || APP_IMAGES.fuji" placeholder="或貼上圖片網址 (https://...)" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-[11px]">
+            <p class="text-[10px] text-slate-400">上傳照片會自動壓縮最佳化，並與行程頁同步更新</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-xs">
+        <label class="block text-[11px] font-semibold text-slate-600 mb-1">簡短介紹</label>
+        <textarea id="attEditDesc" rows="2" placeholder="輸入景點介紹或攻略備註..." class="w-full px-2.5 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-fuji-600"></textarea>
+      </div>
+      <div class="p-3 bg-rose-50/70 border border-rose-200/80 rounded-xl space-y-2 text-xs">
+        <div class="font-bold text-rose-900 text-[11px]">🎬 YouTube / Instagram 影片連結</div>
+        <div>
+          <label class="block text-[10px] text-rose-700 mb-0.5">影片標題</label>
+          <input type="text" id="attEditVideoTitle" placeholder="例：河口湖冬季散步 Vlog" class="w-full px-2.5 py-1.5 bg-white border border-rose-200 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-[10px] text-rose-700 mb-0.5">影片網址（支援 YouTube 一般網址、Shorts 或 IG Reels 連結）</label>
+          <input type="url" id="attEditVideoUrl" placeholder="https://www.youtube.com/watch?v=... 或 https://www.instagram.com/reel/..." class="w-full px-2.5 py-1.5 bg-white border border-rose-200 rounded-lg">
+        </div>
+      </div>
+      <div class="text-xs">
+        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Google Maps 導航網址</label>
+        <input type="url" id="attEditMapsUrl" placeholder="https://maps.google.com/?q=..." class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+        <button id="attDeleteBtn" type="button" onclick="deleteAttractionItem()" class="px-3 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold hidden">
+          🗑 刪除景點
+        </button>
+        <div class="flex items-center space-x-2 ml-auto">
+          <button type="button" onclick="closeAttractionEditModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">取消</button>
+          <button type="button" onclick="saveAttractionItem()" class="px-4 py-1.5 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-xs font-bold">儲存並同步</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Link Itinerary Item to Attraction Modal -->
+  <div id="linkAttractionModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeLinkAttractionModal()">
+    <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-slate-200 p-5 space-y-3" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+        <h3 class="text-sm font-extrabold text-slate-900">🔗 連動「景點與影片」資料</h3>
+        <button onclick="closeLinkAttractionModal()" class="text-slate-400 hover:text-slate-700 text-lg leading-none">✕</button>
+      </div>
+      <p id="linkItTitle" class="text-xs font-bold text-fuji-700"></p>
+      <input type="hidden" id="linkItItemId" value="">
+      <div class="text-xs">
+        <label class="block text-[11px] font-semibold text-slate-600 mb-1">選擇要連動的景點／影片卡片：</label>
+        <select id="linkAttractionSelect" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg bg-slate-50 text-xs">
+          <!-- Dynamically populated -->
+        </select>
+        <p class="text-[10px] text-slate-400 mt-1.5">連動後，此行程卡片將自動抓取該景點的圖片、費用與 YT/IG 影片按鈕。</p>
+      </div>
+      <div class="flex justify-end space-x-2 pt-2 border-t border-slate-100">
+        <button type="button" onclick="closeLinkAttractionModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">取消</button>
+        <button type="button" onclick="saveItineraryAttractionLink()" class="px-4 py-1.5 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-xs font-bold">確認連動</button>
       </div>
     </div>
   </div>
@@ -2406,6 +2522,11 @@
 
       items.forEach((item, index) => {
         const isSplit = item.type === '分組活動';
+        const linkedAtt = findLinkedAttraction(item);
+        const cardImage = (linkedAtt && linkedAtt.image) ? linkedAtt.image : item.image;
+        const cardMapsUrl = item.mapsUrl || (linkedAtt ? linkedAtt.mapsUrl : '');
+        const cardVideoUrl = linkedAtt ? (linkedAtt.videoUrl || '') : '';
+        const cardVideoTitle = linkedAtt ? (linkedAtt.videoTitle || linkedAtt.name) : item.title;
         const card = document.createElement('div');
         card.id = `timelineCard-${item.id}`;
         card.className = `flex items-start space-x-2.5 sm:space-x-3.5 relative transition duration-200 group`;
@@ -2456,7 +2577,7 @@
               <!-- Compact / Normal Image Banner -->
               ${state.itineraryMode !== 'summary' ? `
                 <div class="relative h-32 sm:h-40 overflow-hidden bg-slate-900">
-                  <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                  <img src="${cardImage}" alt="${item.title}" class="w-full h-full object-cover">
                   <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/20 to-transparent flex items-end p-3">
                     <div class="flex items-center space-x-1.5">
                       <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
@@ -2503,6 +2624,15 @@
                     <span class="font-semibold text-slate-700 mr-1">集合地點：</span>
                     <span>${item.location}</span>
                   </div>
+                  ${linkedAtt ? `
+                    <div class="p-2.5 bg-sky-50/70 border border-sky-200/80 rounded-xl space-y-1">
+                      <div class="flex items-center justify-between">
+                        <span class="text-[11px] font-bold text-sky-900">🔗 已連動景點：${linkedAtt.name}</span>
+                        <span class="text-[10px] text-sky-700 font-semibold">${linkedAtt.cost || ''}</span>
+                      </div>
+                      <p class="text-[11px] text-sky-800 leading-relaxed">${linkedAtt.shortDesc || ''}</p>
+                    </div>
+                  ` : ''}
                   ${isSplit ? `
                     <div class="mt-2 p-2.5 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between">
                       <div>
@@ -2525,8 +2655,16 @@
                     </svg>
                   </button>
 
-                  <div class="flex items-center space-x-2">
-                    <a href="${item.mapsUrl}" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center text-[11px]">
+                  <div class="flex items-center space-x-1.5">
+                    ${cardVideoUrl ? `
+                      <button onclick="openVideoModal('${cardVideoTitle.replace(/'/g, "\\'")}', '${cardVideoUrl.replace(/'/g, "\\'")}')" class="px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold transition flex items-center text-[11px]">
+                        🎬 影片
+                      </button>
+                    ` : ''}
+                    <button onclick="openLinkAttractionModal('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition text-[11px]" title="設定連動景點或圖片">
+                      🔗 連動
+                    </button>
+                    <a href="${cardMapsUrl}" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center text-[11px]">
                       <svg class="w-3.5 h-3.5 mr-1 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       </svg>
@@ -2913,7 +3051,82 @@
     }
 
     // --- 9. ATTRACTIONS & VIDEO MODAL ---
+    function handleAttractionImageUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const maxW = 720;
+          const scale = img.width > maxW ? (maxW / img.width) : 1;
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+          document.getElementById('attEditImgUrl').value = dataUrl;
+          document.getElementById('attEditImgPreview').src = dataUrl;
+          showToast('已載入並最佳化圖片，記得按「儲存並同步」！', 'info');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function findLinkedAttraction(item) {
+      if (item.attractionId) {
+        const exact = state.attractions.find(a => a.id === item.attractionId);
+        if (exact) return exact;
+      }
+      // 自動關鍵字比對（若尚未手動指定）
+      const t = (item.title + ' ' + (item.japaneseName || '')).toLowerCase();
+      return state.attractions.find(a => {
+        const cleanName = a.name.split('（')[0].trim().toLowerCase();
+        return (cleanName.length >= 2 && t.includes(cleanName)) || (a.japanese && t.includes(a.japanese.toLowerCase()));
+      }) || null;
+    }
+
+    function openLinkAttractionModal(itemId) {
+      const item = state.itinerary.find(i => i.id === itemId);
+      if (!item) return;
+      document.getElementById('linkItItemId').value = itemId;
+      document.getElementById('linkItTitle').textContent = `DAY ${item.day}・${item.title}`;
+      const sel = document.getElementById('linkAttractionSelect');
+      sel.innerHTML = '<option value="">（不連動，使用行程預設資料）</option>';
+      const currentLinked = findLinkedAttraction(item);
+      state.attractions.forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.id;
+        opt.textContent = `${a.name}${a.videoUrl ? ' 🎬' : ''}`;
+        if ((item.attractionId && item.attractionId === a.id) || (!item.attractionId && currentLinked && currentLinked.id === a.id)) {
+          opt.selected = true;
+        }
+        sel.appendChild(opt);
+      });
+      document.getElementById('linkAttractionModal').classList.remove('hidden');
+    }
+
+    function closeLinkAttractionModal() {
+      document.getElementById('linkAttractionModal').classList.add('hidden');
+    }
+
+    function saveItineraryAttractionLink() {
+      const itemId = document.getElementById('linkItItemId').value;
+      const attId = document.getElementById('linkAttractionSelect').value;
+      const idx = state.itinerary.findIndex(i => i.id === itemId);
+      if (idx !== -1) {
+        state.itinerary[idx].attractionId = attId || '';
+        saveState('itinerary', state.itinerary);
+        renderItinerary();
+        closeLinkAttractionModal();
+        showToast(attId ? '已連動景點圖片與影片！' : '已取消連動，恢復預設圖片', 'success');
+      }
+    }
+
     function filterAttractions(category) {
+      activeAttractionCategory = category;
       document.querySelectorAll('.cat-pill').forEach(btn => {
         btn.classList.remove('bg-fuji-700', 'text-white');
         btn.classList.add('bg-white', 'text-slate-700');
@@ -2971,14 +3184,19 @@
             </div>
           </div>
 
-          <div class="p-4 pt-0 flex items-center justify-between text-xs border-t border-slate-100 mt-2">
-            <button onclick="openVideoModal('${att.videoTitle}', '${att.videoUrl}')" class="text-rose-600 hover:text-rose-700 font-medium flex items-center text-[11px]">
+          <div class="p-4 pt-0 flex items-center justify-between text-xs border-t border-slate-100 mt-2 pt-2.5">
+            <div class="flex items-center space-x-3">
+              <button onclick="openVideoModal('${(att.videoTitle || att.name).replace(/'/g, "\\'")}', '${(att.videoUrl || '').replace(/'/g, "\\'")}')" class="text-rose-600 hover:text-rose-700 font-medium flex items-center text-[11px]">
               <svg class="w-4 h-4 mr-1 text-rose-500" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
               </svg>
               觀看影片
             </button>
 
+              <button onclick="openAttractionEditModal('${att.id}')" class="text-slate-500 hover:text-fuji-700 font-medium text-[11px]">
+                ✏️ 編輯
+              </button>
+            </div>
             <a href="${att.mapsUrl}" target="_blank" class="text-fuji-700 hover:underline flex items-center text-[11px]">
               導航
               <svg class="w-3.5 h-3.5 ml-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2991,15 +3209,150 @@
       });
     }
 
+    function normalizeVideoEmbedUrl(url) {
+      if (!url) return { type: 'none', embedUrl: '', rawUrl: '' };
+      const u = url.trim();
+      if (u.includes('instagram.com')) {
+        return { type: 'ig', embedUrl: '', rawUrl: u };
+      }
+      // YouTube watch?v=, youtu.be/, youtube.com/shorts/
+      let ytId = '';
+      const m1 = u.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
+      const m2 = u.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/);
+      const m3 = u.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{6,})/);
+      const m4 = u.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/);
+      if (m1) ytId = m1[1];
+      else if (m2) ytId = m2[1];
+      else if (m3) ytId = m3[1];
+      else if (m4) ytId = m4[1];
+      if (ytId) {
+        return { type: 'yt', embedUrl: `https://www.youtube.com/embed/${ytId}`, rawUrl: u };
+      }
+      return { type: 'other', embedUrl: u, rawUrl: u };
+    }
+
     function openVideoModal(title, url) {
-      document.getElementById('videoModalTitle').textContent = title;
-      document.getElementById('videoIframe').src = url;
+      if (!url || !url.trim()) {
+        showToast('此景點尚未設定影片連結，可點擊「✏️ 編輯」貼上 YT 或 IG 網址！', 'info');
+        return;
+      }
+      const parsed = normalizeVideoEmbedUrl(url);
+      document.getElementById('videoModalTitle').textContent = title || '影片導覽';
+      document.getElementById('videoExternalLink').href = parsed.rawUrl;
+
+      const wrap = document.getElementById('videoIframeWrapper');
+      const igBox = document.getElementById('videoIgFallback');
+      const iframe = document.getElementById('videoIframe');
+
+      if (parsed.type === 'ig') {
+        iframe.src = '';
+        wrap.classList.add('hidden');
+        igBox.classList.remove('hidden');
+        document.getElementById('videoIgBtn').href = parsed.rawUrl;
+      } else {
+        igBox.classList.add('hidden');
+        wrap.classList.remove('hidden');
+        iframe.src = parsed.embedUrl;
+      }
       document.getElementById('videoModal').classList.remove('hidden');
     }
 
     function closeVideoModal() {
       document.getElementById('videoIframe').src = '';
       document.getElementById('videoModal').classList.add('hidden');
+    }
+
+    let activeAttractionCategory = 'all';
+
+    function openAttractionEditModal(attId) {
+      const modal = document.getElementById('attractionEditModal');
+      const delBtn = document.getElementById('attDeleteBtn');
+      if (attId) {
+        const att = state.attractions.find(a => a.id === attId);
+        if (!att) return;
+        document.getElementById('attModalHeader').textContent = '編輯景點與影片連結';
+        document.getElementById('attEditId').value = att.id;
+        document.getElementById('attEditName').value = att.name || '';
+        document.getElementById('attEditCategory').value = att.category || 'fuji';
+        document.getElementById('attEditJp').value = att.japanese || '';
+        document.getElementById('attEditCost').value = att.cost || '';
+        document.getElementById('attEditDesc').value = att.shortDesc || '';
+        document.getElementById('attEditVideoTitle').value = att.videoTitle || '';
+        document.getElementById('attEditVideoUrl').value = att.videoUrl || '';
+        document.getElementById('attEditMapsUrl').value = att.mapsUrl || '';
+        document.getElementById('attEditImgUrl').value = att.image || '';
+        document.getElementById('attEditImgPreview').src = att.image || APP_IMAGES.fuji;
+        delBtn.classList.remove('hidden');
+      } else {
+        document.getElementById('attModalHeader').textContent = '新增景點 / YT・IG 影片';
+        document.getElementById('attEditId').value = '';
+        document.getElementById('attEditName').value = '';
+        document.getElementById('attEditCategory').value = 'fuji';
+        document.getElementById('attEditJp').value = '';
+        document.getElementById('attEditCost').value = '免費參觀';
+        document.getElementById('attEditDesc').value = '';
+        document.getElementById('attEditVideoTitle').value = '';
+        document.getElementById('attEditVideoUrl').value = '';
+        document.getElementById('attEditMapsUrl').value = '';
+        document.getElementById('attEditImgUrl').value = '';
+        document.getElementById('attEditImgPreview').src = APP_IMAGES.fuji;
+        delBtn.classList.add('hidden');
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closeAttractionEditModal() {
+      document.getElementById('attractionEditModal').classList.add('hidden');
+    }
+
+    function saveAttractionItem() {
+      const editId = document.getElementById('attEditId').value;
+      const name = document.getElementById('attEditName').value.trim();
+      if (!name) {
+        showToast('請輸入景點或餐廳名稱', 'warn');
+        return;
+      }
+      const existing = editId ? state.attractions.find(a => a.id === editId) : null;
+      const attObj = {
+        id: editId || ('att-' + Date.now()),
+        name,
+        japanese: document.getElementById('attEditJp').value.trim() || name,
+        category: document.getElementById('attEditCategory').value,
+        image: (document.getElementById('attEditImgUrl').value || '').trim() || existing?.image || APP_IMAGES.fuji,
+        shortDesc: document.getElementById('attEditDesc').value.trim() || '家族精選推薦景點',
+        fullDesc: existing?.fullDesc || '',
+        highlights: existing?.highlights || '點擊導航與影片查看攻略',
+        suitability: existing?.suitability || ['精選推薦'],
+        stayTime: existing?.stayTime || '1 ~ 1.5 小時',
+        cost: document.getElementById('attEditCost').value.trim() || '依現場公告',
+        mapsUrl: document.getElementById('attEditMapsUrl').value.trim() || `https://maps.google.com/?q=${encodeURIComponent(name)}`,
+        videoTitle: document.getElementById('attEditVideoTitle').value.trim() || `${name} 影片導覽`,
+        videoUrl: document.getElementById('attEditVideoUrl').value.trim()
+      };
+
+      if (existing) {
+        const idx = state.attractions.findIndex(a => a.id === editId);
+        state.attractions[idx] = attObj;
+      } else {
+        state.attractions.unshift(attObj);
+      }
+      saveState('attractions', state.attractions);
+      postToCloud({ action: 'saveAttraction', attraction: attObj });
+      closeAttractionEditModal();
+      renderAttractions(activeAttractionCategory);
+      renderItinerary();
+      showToast(`已更新「${name}」並同步至行程與景點！`, 'success');
+    }
+
+    function deleteAttractionItem() {
+      const editId = document.getElementById('attEditId').value;
+      if (!editId) return;
+      state.attractions = state.attractions.filter(a => a.id !== editId);
+      saveState('attractions', state.attractions);
+      postToCloud({ action: 'deleteAttraction', id: editId });
+      closeAttractionEditModal();
+      renderAttractions(activeAttractionCategory);
+      showToast('已刪除該景點紀錄', 'info');
     }
 
     // --- 10. TRAVEL INFO, BUDGET & PACKING ---
@@ -3812,6 +4165,16 @@
             }));
             saveState('itinerary', state.itinerary);
             renderItinerary();
+          }
+          if (Array.isArray(data.attractions) && data.attractions.length > 0) {
+            const defaultAttImg = {};
+            DEFAULT_ATTRACTIONS.forEach(a => { defaultAttImg[a.id] = a.image; });
+            state.attractions = data.attractions.map(a => ({
+              ...a,
+              image: a.image || defaultAttImg[a.id] || APP_IMAGES.fuji,
+              suitability: Array.isArray(a.suitability) ? a.suitability : ['推薦景點']
+            }));
+            saveState('attractions', state.attractions);
           }
           if (Array.isArray(data.expenses)) {
             state.onTripExpenses = data.expenses;
