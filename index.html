@@ -876,12 +876,16 @@
 
         <!-- Full 11-Member Accounting Matrix Table -->
         <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs space-y-2.5">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
             <div>
-              <h5 class="text-xs font-bold text-slate-900">全體成員帳務與共同基金總表</h5>
-              <p class="text-[11px] text-slate-500">左右滑動查看每位成員行前分攤、現場扣款與基金餘額</p>
+              <h3 class="text-sm font-bold text-slate-900">全體成員帳務與共同基金總表</h3>
+              <p class="text-[11px] text-slate-500">點擊各列「✏️」可修改金額，下方「支出合計」與「共同基金差額」將自動重算</p>
             </div>
-            <span class="text-[10px] text-slate-400">單位：新台幣 (NT$)</span>
+            <div class="flex items-center space-x-2">
+              <button onclick="openFixedExpenseModal(null)" class="px-3 py-1.5 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-[11px] font-bold shadow-2xs transition">
+                ＋ 新增行前帳務項目
+              </button>
+            </div>
           </div>
 
           <div class="overflow-x-auto border border-slate-200 rounded-xl">
@@ -1273,6 +1277,70 @@
         <div class="flex items-center space-x-2 ml-auto">
           <button type="button" onclick="closeAttractionEditModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">取消</button>
           <button type="button" onclick="saveAttractionItem()" class="px-4 py-1.5 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-xs font-bold">儲存並同步</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed Expense / PrePaid Edit Modal -->
+  <div id="fixedExpenseModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeFixedExpenseModal()">
+    <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 p-5 space-y-3.5" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 id="fixedModalTitle" class="text-sm font-extrabold text-slate-900">編輯行前帳務項目</h3>
+        <button onclick="closeFixedExpenseModal()" class="text-slate-400 hover:text-slate-700 text-lg leading-none">✕</button>
+      </div>
+      <input type="hidden" id="fixedEditKey" value="">
+      <input type="hidden" id="fixedEditMode" value="expense">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">項目名稱 *</label>
+          <input type="text" id="fixedEditLabel" placeholder="例：河口湖住宿費" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-fuji-600">
+        </div>
+        <div id="fixedUnitTotalGroup">
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">單價 / 總價 (NT$)</label>
+          <input type="number" id="fixedEditUnitTotal" oninput="updateFixedModalTotals()" placeholder="例：114783" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-fuji-600">
+        </div>
+      </div>
+
+      <!-- Quick Split Buttons -->
+      <div id="fixedQuickSplitBar" class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
+        <div class="text-[10px] font-bold text-slate-600">⚡ 依上方總價快速試算每人分攤（可再微調個別數字）：</div>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" onclick="autoSplitFixedExpense('all_half')" class="px-2 py-1 bg-white hover:bg-fuji-50 border border-slate-200 rounded text-[10px] font-semibold text-slate-700">10大1小(半價)</button>
+          <button type="button" onclick="autoSplitFixedExpense('adults')" class="px-2 py-1 bg-white hover:bg-fuji-50 border border-slate-200 rounded text-[10px] font-semibold text-slate-700">10大人均攤</button>
+          <button type="button" onclick="autoSplitFixedExpense('six')" class="px-2 py-1 bg-white hover:bg-fuji-50 border border-slate-200 rounded text-[10px] font-semibold text-slate-700">6人組(媽媽~琬琦)</button>
+          <button type="button" onclick="autoSplitFixedExpense('five_half')" class="px-2 py-1 bg-white hover:bg-fuji-50 border border-slate-200 rounded text-[10px] font-semibold text-slate-700">5人組(靜雅~葫蘆半)</button>
+        </div>
+      </div>
+
+      <!-- 11 Members Individual Inputs -->
+      <div class="space-y-1.5">
+        <div class="text-[11px] font-bold text-slate-700">各成員分攤 / 繳費金額（不參與分攤請留白）：</div>
+        <div id="fixedMemberInputsGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 text-xs">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Live Sum & Diff Preview -->
+      <div class="p-2.5 bg-indigo-50/70 border border-indigo-200 rounded-xl flex items-center justify-between text-xs">
+        <div>
+          <span class="text-indigo-900 font-bold">11 人加總：</span>
+          <span id="fixedModalSumText" class="font-extrabold text-indigo-700">NT$0</span>
+        </div>
+        <div id="fixedModalDiffWrap">
+          <span class="text-slate-500 text-[11px]">與總價差額：</span>
+          <span id="fixedModalDiffText" class="font-bold text-emerald-700">NT$0</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+        <button id="fixedDeleteBtn" type="button" onclick="deleteFixedExpenseRow()" class="px-3 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold hidden">
+          🗑 刪除此項目
+        </button>
+        <div class="flex items-center space-x-2 ml-auto">
+          <button type="button" onclick="closeFixedExpenseModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">取消</button>
+          <button type="button" onclick="saveFixedExpenseRow()" class="px-4 py-1.5 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-xs font-bold">儲存並重算</button>
         </div>
       </div>
     </div>
@@ -3428,12 +3496,34 @@
       { key: 'airport_shuttle', label: '楠梓->高雄機場接駁', unitTotal: 1242, values: [207, 207, 207, 207, 207, 207, null, null, null, null, null], rowTotal: 1242 }
     ];
 
-    // 期初共同基金 = 原設定共同基金 ($5,000/$2,000) + 原先差額 ($683/$182/$86)
-    const ACCOUNTING_INITIAL_FUND = {
-      label: '期初共同基金(含原結餘轉入)',
-      values: [5683, 5683, 5683, 5683, 5683, 5683, 5182, 5182, 5182, 5182, 2086],
-      rowTotal: 56913
-    };
+    function getPrePaidValues() {
+      return loadState('prePaidValues', ACCOUNTING_PRE_PAID.values);
+    }
+
+    function getFixedExpensesList() {
+      const saved = loadState('fixedExpenses', null);
+      if (Array.isArray(saved) && saved.length > 0) return saved;
+      return ACCOUNTING_FIXED_EXPENSES;
+    }
+
+    function computeDynamicLedger() {
+      const prePaid = getPrePaidValues();
+      const fixedList = getFixedExpensesList();
+      const prePaidTotal = prePaid.reduce((s, v) => s + (Number(v) || 0), 0);
+
+      const fixedTotalPerMember = ACCOUNTING_MEMBERS.map((_, idx) => {
+        return fixedList.reduce((s, row) => s + (Number(row.values[idx]) || 0), 0);
+      });
+      const fixedGrandTotal = fixedTotalPerMember.reduce((s, v) => s + v, 0);
+
+      // 期初共同基金(差額) = 已繳費 - 行前支出合計 (動態自動計算！)
+      const initFundPerMember = ACCOUNTING_MEMBERS.map((_, idx) => {
+        return (Number(prePaid[idx]) || 0) - fixedTotalPerMember[idx];
+      });
+      const initFundGrandTotal = prePaidTotal - fixedGrandTotal;
+
+      return { prePaid, prePaidTotal, fixedList, fixedTotalPerMember, fixedGrandTotal, initFundPerMember, initFundGrandTotal };
+    }
 
     let selectedAccountingMemberIdx = 0;
     let selectedExpenseMembers = new Set(ACCOUNTING_MEMBERS);
@@ -3584,6 +3674,176 @@
       return 'NT$' + val.toLocaleString();
     }
 
+    function openFixedExpenseModal(key) {
+      const modal = document.getElementById('fixedExpenseModal');
+      const grid = document.getElementById('fixedMemberInputsGrid');
+      const delBtn = document.getElementById('fixedDeleteBtn');
+      const unitGroup = document.getElementById('fixedUnitTotalGroup');
+      const splitBar = document.getElementById('fixedQuickSplitBar');
+      const diffWrap = document.getElementById('fixedModalDiffWrap');
+
+      grid.innerHTML = '';
+      let values = [];
+
+      if (key === '__PREPAID__') {
+        document.getElementById('fixedModalTitle').textContent = '修正「已繳費」金額';
+        document.getElementById('fixedEditMode').value = 'prepaid';
+        document.getElementById('fixedEditKey').value = '__PREPAID__';
+        document.getElementById('fixedEditLabel').value = '已繳費';
+        document.getElementById('fixedEditLabel').disabled = true;
+        document.getElementById('fixedEditUnitTotal').value = '';
+        unitGroup.classList.add('hidden');
+        splitBar.classList.add('hidden');
+        diffWrap.classList.add('hidden');
+        delBtn.classList.add('hidden');
+        values = getPrePaidValues();
+      } else if (key) {
+        const row = getFixedExpensesList().find(r => r.key === key);
+        if (!row) return;
+        document.getElementById('fixedModalTitle').textContent = `編輯「${row.label}」`;
+        document.getElementById('fixedEditMode').value = 'expense';
+        document.getElementById('fixedEditKey').value = row.key;
+        document.getElementById('fixedEditLabel').value = row.label;
+        document.getElementById('fixedEditLabel').disabled = false;
+        document.getElementById('fixedEditUnitTotal').value = row.unitTotal || '';
+        unitGroup.classList.remove('hidden');
+        splitBar.classList.remove('hidden');
+        diffWrap.classList.remove('hidden');
+        delBtn.classList.remove('hidden');
+        values = row.values;
+      } else {
+        document.getElementById('fixedModalTitle').textContent = '新增行前帳務分攤項目';
+        document.getElementById('fixedEditMode').value = 'expense';
+        document.getElementById('fixedEditKey').value = '';
+        document.getElementById('fixedEditLabel').value = '';
+        document.getElementById('fixedEditLabel').disabled = false;
+        document.getElementById('fixedEditUnitTotal').value = '';
+        unitGroup.classList.remove('hidden');
+        splitBar.classList.remove('hidden');
+        diffWrap.classList.remove('hidden');
+        delBtn.classList.add('hidden');
+        values = ACCOUNTING_MEMBERS.map(() => null);
+      }
+
+      ACCOUNTING_MEMBERS.forEach((name, idx) => {
+        const val = values[idx] !== null && values[idx] !== undefined ? values[idx] : '';
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <label class="block text-[10px] font-semibold text-slate-600 mb-0.5">${name}</label>
+          <input type="number" id="fixedMemberInput-${idx}" value="${val}" oninput="updateFixedModalTotals()" placeholder="-" class="w-full px-2 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-fuji-600">
+        `;
+        grid.appendChild(div);
+      });
+
+      updateFixedModalTotals();
+      modal.classList.remove('hidden');
+    }
+
+    function closeFixedExpenseModal() {
+      document.getElementById('fixedExpenseModal').classList.add('hidden');
+    }
+
+    function updateFixedModalTotals() {
+      let sum = 0;
+      ACCOUNTING_MEMBERS.forEach((_, idx) => {
+        const el = document.getElementById(`fixedMemberInput-${idx}`);
+        if (el && el.value !== '') sum += (parseFloat(el.value) || 0);
+      });
+      document.getElementById('fixedModalSumText').textContent = 'NT$' + sum.toLocaleString();
+
+      const unitVal = parseFloat(document.getElementById('fixedEditUnitTotal').value) || 0;
+      const diff = sum - unitVal;
+      const diffEl = document.getElementById('fixedModalDiffText');
+      if (diffEl) {
+        diffEl.textContent = (diff > 0 ? '+' : '') + 'NT$' + diff.toLocaleString();
+        diffEl.className = `font-bold ${diff === 0 ? 'text-emerald-700' : 'text-amber-700'}`;
+      }
+    }
+
+    function autoSplitFixedExpense(mode) {
+      const total = parseFloat(document.getElementById('fixedEditUnitTotal').value);
+      if (!total || total <= 0) {
+        showToast('請先輸入「單價 / 總價」再按快速試算', 'warn');
+        return;
+      }
+      ACCOUNTING_MEMBERS.forEach((name, idx) => {
+        const el = document.getElementById(`fixedMemberInput-${idx}`);
+        if (!el) return;
+        if (mode === 'all_half') {
+          el.value = name === '葫蘆' ? Math.round(total / 21) : Math.round(total / 10.5);
+        } else if (mode === 'adults') {
+          el.value = name === '葫蘆' ? '' : Math.round(total / 10);
+        } else if (mode === 'six') {
+          el.value = idx < 6 ? Math.round(total / 6) : '';
+        } else if (mode === 'five_half') {
+          if (idx >= 6) {
+            el.value = name === '葫蘆' ? Math.round(total / 9) : Math.round(total / 4.5);
+          } else {
+            el.value = '';
+          }
+        }
+      });
+      updateFixedModalTotals();
+    }
+
+    function saveFixedExpenseRow() {
+      const mode = document.getElementById('fixedEditMode').value;
+      const key = document.getElementById('fixedEditKey').value;
+      const values = ACCOUNTING_MEMBERS.map((_, idx) => {
+        const raw = document.getElementById(`fixedMemberInput-${idx}`).value;
+        return raw === '' ? null : Math.round(parseFloat(raw) || 0);
+      });
+
+      if (mode === 'prepaid') {
+        saveState('prePaidValues', values);
+        postToCloud({ action: 'updateConfig', key: 'prePaidValuesJson', value: JSON.stringify(values) });
+        closeFixedExpenseModal();
+        renderBudgetTable();
+        showToast('已更新「已繳費」並自動重算共同基金差額！', 'success');
+        return;
+      }
+
+      const label = document.getElementById('fixedEditLabel').value.trim();
+      if (!label) {
+        showToast('請輸入項目名稱', 'warn');
+        return;
+      }
+      const unitTotal = Math.round(parseFloat(document.getElementById('fixedEditUnitTotal').value) || 0) || values.reduce((s, v) => s + (v || 0), 0);
+      const list = [...getFixedExpensesList()];
+      const rowObj = {
+        key: key || ('fix-' + Date.now()),
+        label,
+        unitTotal,
+        values,
+        rowTotal: values.reduce((s, v) => s + (v || 0), 0),
+        highlightRed: key === 'kawaguchiko_stay'
+      };
+
+      if (key) {
+        const idx = list.findIndex(r => r.key === key);
+        if (idx !== -1) list[idx] = rowObj;
+      } else {
+        list.push(rowObj);
+      }
+
+      saveState('fixedExpenses', list);
+      postToCloud({ action: 'updateConfig', key: 'fixedExpensesJson', value: JSON.stringify(list) });
+      closeFixedExpenseModal();
+      renderBudgetTable();
+      showToast(`已儲存「${label}」並重新計算加總與差額！`, 'success');
+    }
+
+    function deleteFixedExpenseRow() {
+      const key = document.getElementById('fixedEditKey').value;
+      if (!key) return;
+      const list = getFixedExpensesList().filter(r => r.key !== key);
+      saveState('fixedExpenses', list);
+      postToCloud({ action: 'updateConfig', key: 'fixedExpensesJson', value: JSON.stringify(list) });
+      closeFixedExpenseModal();
+      renderBudgetTable();
+      showToast('已刪除該行前帳務項目並重算總表', 'info');
+    }
+
     function renderBudgetTable() {
       const rateEl = document.getElementById('exchangeRateInput');
       if (rateEl && document.activeElement !== rateEl) {
@@ -3606,10 +3866,11 @@
       });
       const onTripGrandTotal = state.onTripExpenses.reduce((sum, exp) => sum + exp.ntdTotal, 0);
 
+      const ledger = computeDynamicLedger();
       const remainingFundPerMember = ACCOUNTING_MEMBERS.map((_, idx) => {
-        return ACCOUNTING_INITIAL_FUND.values[idx] - onTripMemberTotals[idx];
+        return ledger.initFundPerMember[idx] - onTripMemberTotals[idx];
       });
-      const remainingFundGrandTotal = ACCOUNTING_INITIAL_FUND.rowTotal - onTripGrandTotal;
+      const remainingFundGrandTotal = ledger.initFundGrandTotal - onTripGrandTotal;
 
       // Update KPI Cards & Home Banner
       const kpiSpent = document.getElementById('kpiTotalOnTripSpent');
@@ -3649,13 +3910,13 @@
       const cardEl = document.getElementById('personalAccountingCard');
       if (cardEl) {
         const mName = ACCOUNTING_MEMBERS[selectedAccountingMemberIdx];
-        const paid = ACCOUNTING_PRE_PAID.values[selectedAccountingMemberIdx];
-        const initFund = ACCOUNTING_INITIAL_FUND.values[selectedAccountingMemberIdx];
+        const paid = ledger.prePaid[selectedAccountingMemberIdx] || 0;
+        const initFund = ledger.initFundPerMember[selectedAccountingMemberIdx];
         const spent = onTripMemberTotals[selectedAccountingMemberIdx];
         const remFund = remainingFundPerMember[selectedAccountingMemberIdx];
 
-        const fixedItems = ACCOUNTING_FIXED_EXPENSES.filter(r => r.values[selectedAccountingMemberIdx] !== null);
-        const fixedTotal = fixedItems.reduce((s, r) => s + r.values[selectedAccountingMemberIdx], 0);
+        const fixedItems = ledger.fixedList.filter(r => r.values[selectedAccountingMemberIdx] !== null && r.values[selectedAccountingMemberIdx] !== undefined && r.values[selectedAccountingMemberIdx] !== '');
+        const fixedTotal = ledger.fixedTotalPerMember[selectedAccountingMemberIdx];
         const memberOnTripItems = state.onTripExpenses.filter(e => e.shares[mName] !== null && e.shares[mName] !== undefined);
 
         cardEl.innerHTML = `
@@ -3733,36 +3994,56 @@
 
       const paidRowHtml = `
         <tr class="border-b border-slate-100 bg-sky-50/90 text-sky-950 font-semibold">
-          <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-sky-50">${ACCOUNTING_PRE_PAID.label}</td>
+          <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-sky-50">
+            <div class="flex items-center justify-between space-x-1">
+              <span>已繳費</span>
+              <button onclick="openFixedExpenseModal('__PREPAID__')" class="text-[10px] text-sky-700 hover:text-sky-950 px-1" title="修改已繳費金額">✏️</button>
+            </div>
+          </td>
           <td class="py-2 px-2.5 border-r border-slate-200"></td>
-          ${ACCOUNTING_PRE_PAID.values.map(v => `<td class="py-2 px-2.5">${fmtNTD(v)}</td>`).join('')}
-          <td class="py-2 px-3 border-l border-slate-200 font-bold">${fmtNTD(ACCOUNTING_PRE_PAID.rowTotal)}</td>
+          ${ledger.prePaid.map(v => `<td class="py-2 px-2.5">${fmtNTD(v)}</td>`).join('')}
+          <td class="py-2 px-3 border-l border-slate-200 font-bold">${fmtNTD(ledger.prePaidTotal)}</td>
         </tr>
       `;
 
-      const fixedRowsHtml = ACCOUNTING_FIXED_EXPENSES.map(row => {
+      const fixedRowsHtml = ledger.fixedList.map(row => {
+        const dynamicRowTotal = row.values.reduce((s, v) => s + (Number(v) || 0), 0);
         const cells = row.values.map((v, idx) => {
           const isColSel = idx === selectedAccountingMemberIdx;
-          const cellColor = (row.highlightRed && v !== null) ? 'text-rose-600' : '';
+          const cellColor = (row.highlightRed && v !== null && v !== undefined && v !== '') ? 'text-rose-600' : '';
           return `<td class="py-2 px-2.5 ${isColSel ? 'bg-fuji-50/60' : ''} ${cellColor}">${fmtNTD(v)}</td>`;
         }).join('');
 
         return `
           <tr class="border-b border-slate-100 bg-white hover:bg-slate-50 text-slate-700">
-            <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-white">${row.label}</td>
+            <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-white">
+              <div class="flex items-center justify-between space-x-1">
+                <span>${row.label}</span>
+                <button onclick="openFixedExpenseModal('${row.key}')" class="text-[10px] text-slate-400 hover:text-fuji-700 px-1" title="編輯或修正數字">✏️</button>
+              </div>
+            </td>
             <td class="py-2 px-2.5 border-r border-slate-200 text-slate-600">${fmtNTD(row.unitTotal)}</td>
             ${cells}
-            <td class="py-2 px-3 border-l border-slate-200 font-bold">${fmtNTD(row.rowTotal)}</td>
+            <td class="py-2 px-3 border-l border-slate-200 font-bold">${fmtNTD(dynamicRowTotal)}</td>
           </tr>
         `;
       }).join('');
 
+      const fixedSumRowHtml = `
+        <tr class="border-b border-slate-200 bg-slate-100/90 text-slate-800 font-bold">
+          <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-slate-100">行前支出合計</td>
+          <td class="py-2 px-2.5 border-r border-slate-200 text-[10px] text-slate-500">自動加總</td>
+          ${ledger.fixedTotalPerMember.map(v => `<td class="py-2 px-2.5">${fmtNTD(v)}</td>`).join('')}
+          <td class="py-2 px-3 border-l border-slate-200 font-bold">${fmtNTD(ledger.fixedGrandTotal)}</td>
+        </tr>
+      `;
+
       const initFundRowHtml = `
         <tr class="border-b border-slate-200 bg-indigo-50/60 text-indigo-950 font-bold">
-          <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-indigo-50">${ACCOUNTING_INITIAL_FUND.label}</td>
-          <td class="py-2 px-2.5 border-r border-slate-200 text-[10px] text-indigo-600">原基金+結餘</td>
-          ${ACCOUNTING_INITIAL_FUND.values.map(v => `<td class="py-2 px-2.5">${fmtNTD(v)}</td>`).join('')}
-          <td class="py-2 px-3 border-l border-slate-200 font-bold">${fmtNTD(ACCOUNTING_INITIAL_FUND.rowTotal)}</td>
+          <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-indigo-50">期初共同基金(結餘差額)</td>
+          <td class="py-2 px-2.5 border-r border-slate-200 text-[10px] text-indigo-600">已繳 - 支出</td>
+          ${ledger.initFundPerMember.map(v => `<td class="py-2 px-2.5 ${v < 0 ? 'text-rose-600' : ''}">${fmtNTD(v)}</td>`).join('')}
+          <td class="py-2 px-3 border-l border-slate-200 font-bold">${fmtNTD(ledger.initFundGrandTotal)}</td>
         </tr>
       `;
 
@@ -3797,7 +4078,7 @@
         </tr>
       `;
 
-      tableEl.innerHTML = `${thead}<tbody>${paidRowHtml}${fixedRowsHtml}${initFundRowHtml}${onTripRowsHtml}${remFundRowHtml}</tbody>`;
+      tableEl.innerHTML = `${thead}<tbody>${paidRowHtml}${fixedRowsHtml}${fixedSumRowHtml}${initFundRowHtml}${onTripRowsHtml}${remFundRowHtml}</tbody>`;
     }
 
     function copyMemberAccountingText() {
@@ -4188,6 +4469,18 @@
                 state.exchangeRate = r;
                 saveState('exchangeRate', r);
               }
+            }
+            if (data.config.prePaidValuesJson) {
+              try {
+                const pp = JSON.parse(data.config.prePaidValuesJson);
+                if (Array.isArray(pp)) saveState('prePaidValues', pp);
+              } catch (e) {}
+            }
+            if (data.config.fixedExpensesJson) {
+              try {
+                const fe = JSON.parse(data.config.fixedExpensesJson);
+                if (Array.isArray(fe)) saveState('fixedExpenses', fe);
+              } catch (e) {}
             }
             if (data.config.announcement) {
               state.announcement = data.config.announcement;
