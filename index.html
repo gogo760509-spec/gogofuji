@@ -602,7 +602,7 @@
         <button onclick="filterAttractions('activity')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition">體驗與滑雪</button>
         <button onclick="filterAttractions('food')" class="cat-pill px-3 py-1.5 rounded-full text-xs font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition">美食與餐廳</button>
         </div>
-        <button onclick="openAttractionEditModal(null)" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-bold shadow-2xs transition shrink-0">
+        <button id="addAttractionBtn" onclick="openAttractionEditModal(null)" class="hidden px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-bold shadow-2xs transition shrink-0">
           ＋ 新增景點 / YT・IG 影片
         </button>
       </div>
@@ -879,10 +879,10 @@
           <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
             <div>
               <h3 class="text-sm font-bold text-slate-900">全體成員帳務與共同基金總表</h3>
-              <p class="text-[11px] text-slate-500">點擊各列「✏️」可修改金額，下方「支出合計」與「共同基金差額」將自動重算</p>
+              <p class="text-[11px] text-slate-500">左右滑動查看每位成員行前分攤、支出合計與基金差額（系統管理者登入後可編輯）</p>
             </div>
             <div class="flex items-center space-x-2">
-              <button onclick="openFixedExpenseModal(null)" class="px-3 py-1.5 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-[11px] font-bold shadow-2xs transition">
+              <button id="addFixedExpenseBtn" onclick="openFixedExpenseModal(null)" class="hidden px-3 py-1.5 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-[11px] font-bold shadow-2xs transition">
                 ＋ 新增行前帳務項目
               </button>
             </div>
@@ -2729,9 +2729,11 @@
                         🎬 影片
                       </button>
                     ` : ''}
-                    <button onclick="openLinkAttractionModal('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition text-[11px]" title="設定連動景點或圖片">
-                      🔗 連動
-                    </button>
+                    ${state.isAdminAuthenticated ? `
+                      <button onclick="openLinkAttractionModal('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition text-[11px]" title="設定連動景點或圖片">
+                        🔗 連動
+                      </button>
+                    ` : ''}
                     <a href="${cardMapsUrl}" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center text-[11px]">
                       <svg class="w-3.5 h-3.5 mr-1 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -3157,6 +3159,7 @@
     }
 
     function openLinkAttractionModal(itemId) {
+      if (!state.isAdminAuthenticated) { showToast('此編輯功能僅限「系統管理者」於管理後台登入後操作', 'warn'); return; }
       const item = state.itinerary.find(i => i.id === itemId);
       if (!item) return;
       document.getElementById('linkItItemId').value = itemId;
@@ -3261,9 +3264,11 @@
               觀看影片
             </button>
 
-              <button onclick="openAttractionEditModal('${att.id}')" class="text-slate-500 hover:text-fuji-700 font-medium text-[11px]">
-                ✏️ 編輯
-              </button>
+              ${state.isAdminAuthenticated ? `
+                <button onclick="openAttractionEditModal('${att.id}')" class="text-slate-500 hover:text-fuji-700 font-medium text-[11px]">
+                  ✏️ 編輯
+                </button>
+              ` : ''}
             </div>
             <a href="${att.mapsUrl}" target="_blank" class="text-fuji-700 hover:underline flex items-center text-[11px]">
               導航
@@ -3333,6 +3338,7 @@
     let activeAttractionCategory = 'all';
 
     function openAttractionEditModal(attId) {
+      if (!state.isAdminAuthenticated) { showToast('此編輯功能僅限「系統管理者」於管理後台登入後操作', 'warn'); return; }
       const modal = document.getElementById('attractionEditModal');
       const delBtn = document.getElementById('attDeleteBtn');
       if (attId) {
@@ -3675,6 +3681,7 @@
     }
 
     function openFixedExpenseModal(key) {
+      if (!state.isAdminAuthenticated) { showToast('此編輯功能僅限「系統管理者」於管理後台登入後操作', 'warn'); return; }
       const modal = document.getElementById('fixedExpenseModal');
       const grid = document.getElementById('fixedMemberInputsGrid');
       const delBtn = document.getElementById('fixedDeleteBtn');
@@ -3997,7 +4004,7 @@
           <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-sky-50">
             <div class="flex items-center justify-between space-x-1">
               <span>已繳費</span>
-              <button onclick="openFixedExpenseModal('__PREPAID__')" class="text-[10px] text-sky-700 hover:text-sky-950 px-1" title="修改已繳費金額">✏️</button>
+              ${state.isAdminAuthenticated ? `<button onclick="openFixedExpenseModal('__PREPAID__')" class="text-[10px] text-sky-700 hover:text-sky-950 px-1" title="修改已繳費金額">✏️</button>` : ''}
             </div>
           </td>
           <td class="py-2 px-2.5 border-r border-slate-200"></td>
@@ -4019,7 +4026,7 @@
             <td class="py-2 px-3 text-left font-bold sticky left-0 z-10 border-r border-slate-200 bg-white">
               <div class="flex items-center justify-between space-x-1">
                 <span>${row.label}</span>
-                <button onclick="openFixedExpenseModal('${row.key}')" class="text-[10px] text-slate-400 hover:text-fuji-700 px-1" title="編輯或修正數字">✏️</button>
+                ${state.isAdminAuthenticated ? `<button onclick="openFixedExpenseModal('${row.key}')" class="text-[10px] text-slate-400 hover:text-fuji-700 px-1" title="編輯或修正數字">✏️</button>` : ''}
               </div>
             </td>
             <td class="py-2 px-2.5 border-r border-slate-200 text-slate-600">${fmtNTD(row.unitTotal)}</td>
@@ -4309,7 +4316,12 @@
         document.getElementById('adminUnlockedState').classList.remove('hidden');
         document.getElementById('adminLockIcon').classList.add('text-emerald-500');
         renderAdminMemberList();
-        showToast('管理員驗證成功！已解鎖後台編輯權限', 'success');
+        document.getElementById('addFixedExpenseBtn')?.classList.remove('hidden');
+        document.getElementById('addAttractionBtn')?.classList.remove('hidden');
+        renderItinerary();
+        renderAttractions(activeAttractionCategory);
+        renderBudgetTable();
+        showToast('系統管理者驗證成功！已解鎖全站編輯權限', 'success');
       } else {
         document.getElementById('adminPinError').classList.remove('hidden');
       }
@@ -4321,7 +4333,12 @@
       document.getElementById('adminLockedState').classList.remove('hidden');
       document.getElementById('adminUnlockedState').classList.add('hidden');
       document.getElementById('adminLockIcon').classList.remove('text-emerald-500');
-      showToast('已登出管理員身分', 'info');
+      document.getElementById('addFixedExpenseBtn')?.classList.add('hidden');
+      document.getElementById('addAttractionBtn')?.classList.add('hidden');
+      renderItinerary();
+      renderAttractions(activeAttractionCategory);
+      renderBudgetTable();
+      showToast('已登出系統管理者身分', 'info');
     }
 
     function saveAnnouncement() {
