@@ -434,6 +434,7 @@
 
         <div class="flex items-center space-x-1 text-slate-500 text-[11px]">
           <span id="itineraryItemCount">共 6 個活動</span>
+          <button id="addItineraryBtn" onclick="openItineraryEditModal(null)" class="hidden px-2.5 py-1 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-[11px] font-bold shadow-2xs transition">＋ 新增本日行程</button>
         </div>
       </div>
 
@@ -1369,6 +1370,94 @@
     </div>
   </div>
 
+  <!-- Itinerary Edit / Add Modal (Admin Only) -->
+  <div id="itineraryEditModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeItineraryEditModal()">
+    <div class="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 p-5 space-y-3" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <h3 id="itModalHeader" class="text-sm font-extrabold text-slate-900">編輯每日行程</h3>
+        <button onclick="closeItineraryEditModal()" class="text-slate-400 hover:text-slate-700 text-lg leading-none">✕</button>
+      </div>
+      <input type="hidden" id="itEditId" value="">
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">天數</label>
+          <select id="itEditDay" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg bg-slate-50">
+            <option value="1">DAY 1 (12/11)</option>
+            <option value="2">DAY 2 (12/12)</option>
+            <option value="3">DAY 3 (12/13)</option>
+            <option value="4">DAY 4 (12/14)</option>
+            <option value="5">DAY 5 (12/15)</option>
+            <option value="6">DAY 6 (12/16)</option>
+            <option value="7">DAY 7 (12/17)</option>
+            <option value="8">DAY 8 (12/18)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">時段 *</label>
+          <input type="text" id="itEditTime" placeholder="例：18:50 - 21:30" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">停留/車程</label>
+          <input type="text" id="itEditDuration" placeholder="例：約 1 小時" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">行程標題 *</label>
+          <input type="text" id="itEditTitle" placeholder="例：抵達 Fuji Kurasu 心" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg focus:outline-none focus:border-fuji-600">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">日文副標</label>
+          <input type="text" id="itEditJp" placeholder="例：Fuji Kurasu 心 到着" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">活動類型</label>
+          <select id="itEditType" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg bg-slate-50">
+            <option value="共同活動">共同活動</option>
+            <option value="分組活動">分組活動</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">狀態標籤</label>
+          <input type="text" id="itEditStatus" placeholder="例：已確認、自由活動" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+        </div>
+      </div>
+
+      <div class="text-xs">
+        <label class="block text-[11px] font-semibold text-slate-600 mb-1">簡短摘要</label>
+        <textarea id="itEditSummary" rows="2" placeholder="顯示在行程卡片上的簡短說明..." class="w-full px-2.5 py-2 border border-slate-200 rounded-lg"></textarea>
+      </div>
+
+      <div class="text-xs">
+        <label class="block text-[11px] font-semibold text-slate-600 mb-1">詳細注意事項（展開詳情時顯示）</label>
+        <textarea id="itEditDetails" rows="2" placeholder="集合提醒、預約編號、備註..." class="w-full px-2.5 py-2 border border-slate-200 rounded-lg"></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">集合地點</label>
+          <input type="text" id="itEditLocation" placeholder="例：飯店大廳" class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Google Maps 連結</label>
+          <input type="url" id="itEditMapsUrl" placeholder="https://maps.google.com/..." class="w-full px-2.5 py-2 border border-slate-200 rounded-lg">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+        <button id="itDeleteBtn" type="button" onclick="deleteItineraryItem()" class="px-3 py-1.5 text-rose-600 hover:bg-rose-50 rounded-lg text-xs font-semibold hidden">
+          🗑 刪除此行程
+        </button>
+        <div class="flex items-center space-x-2 ml-auto">
+          <button type="button" onclick="closeItineraryEditModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold">取消</button>
+          <button type="button" onclick="saveItineraryItem()" class="px-4 py-1.5 bg-fuji-700 hover:bg-fuji-800 text-white rounded-lg text-xs font-bold">儲存並同步</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Member Picker Modal -->
   <div id="memberPickerModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-sm w-full p-4 shadow-xl border border-slate-200">
@@ -1468,35 +1557,66 @@
       'd3-pm': {
         id: 'd3-pm',
         day: 3,
-        title: 'DAY 3 下午時段分組 (12/13)',
-        time: '14:00 - 17:30',
-        commonContext: '中午品嚐熱騰騰蕎麥麵，下午分流購物或自然品酒，18:00 集合前往居酒屋さかなや。',
+        title: 'DAY 3 自由分組：動物派 VS 滑雪派 (12/13)',
+        time: '11:00 - 14:00',
+        commonContext: '09:30 取車開啟富士山自駕之旅，11:00 分組體驗動物園或滑雪，14:00 起陸續前往御殿場 Premium Outlets 會合購物。',
         options: [
           {
             id: 'd3-pm-optA',
             letter: 'A',
-            name: '御殿場 PREMIUM OUTLETS 暢快血拼組',
-            image: APP_IMAGES.fuji,
-            summary: '日本旗艦級暢貨中心，超過 290 家國際精品與日系品牌冬折扣，邊逛街邊欣賞富士山日落。',
-            suitability: '適合熱愛採購日系服飾、精品配件與伴手禮的成員',
-            duration: '約 3.5 小時',
-            cost: '依個人消費購物而定',
+            name: '富士野生動物園 🦁（自駕／Jungle Bus）',
+            image: APP_IMAGES.farm,
+            summary: '自駕進入野生動物世界，近距離欣賞獅子、老虎、長頸鹿等動物，也可以體驗特色 Jungle Bus！',
+            suitability: '適合親子同樂、喜愛動物與輕鬆自駕觀賞的成員',
+            duration: '約 2.5 ~ 3 小時',
+            cost: '約 ¥3,200／人（特殊遊園體驗另計）',
             needBooking: false,
-            maxSlots: 12,
-            tags: ['免稅購物', '日系品牌', '景觀摩天輪', '自由活動']
+            tags: ['野生動物園', 'Jungle Bus', '親子首選']
           },
           {
             id: 'd3-pm-optB',
             letter: 'B',
-            name: '山中湖平野之濱天鵝倒富士 × 富士御殿場蒸溜所',
-            image: APP_IMAGES.farm,
-            summary: '在山中湖平野之濱近拍優雅白天鵝與湖面倒影富士，隨後探訪 Kirin 威士忌蒸溜所深入品飲。',
-            suitability: '適合喜愛自然風光攝影、深度探訪與品味威士忌的成員',
+            name: 'Snow Park YETI ⛷️（富士山腳下滑雪初體驗）',
+            image: APP_IMAGES.fuji,
+            summary: '富士山腳下的滑雪初體驗！租借雪具、換上雪衣，提前感受滑雪樂趣！',
+            suitability: '適合想體驗滑雪、玩雪與雪景拍照的成員',
             duration: '約 3 小時',
-            cost: '蒸溜所導覽品飲約 ¥1,000 / 人',
-            needBooking: true,
-            maxSlots: 8,
-            tags: ['倒影富士', '天鵝湖畔', '威士忌品酩', '風景攝影']
+            cost: '約 ¥15,700／人（含入場、雪具及雪衣）',
+            needBooking: false,
+            tags: ['滑雪體驗', '雪具租借', '富士山雪場']
+          }
+        ]
+      },
+      'd4-am': {
+        id: 'd4-am',
+        day: 4,
+        title: 'DAY 4 早晨自由選擇：追星日出 VS 睡到自然醒 (12/14)',
+        time: '04:00 - 07:30',
+        commonContext: '凌晨可選擇前往本栖湖追流星雨尾巴與富士山晨光，或留在住宿睡到自然醒；08:30–11:30 全員回住宿早餐補眠。',
+        options: [
+          {
+            id: 'd4-am-optA',
+            letter: 'A',
+            name: '本栖湖追星日出 🌠',
+            image: APP_IMAGES.fuji,
+            summary: '凌晨前往本栖湖追流星雨尾巴、等待富士山晨光！',
+            suitability: '適合早起熱血、想拍星空與日出大景的成員',
+            duration: '約 3.5 小時',
+            cost: '免費參觀（請注意保暖）',
+            needBooking: false,
+            tags: ['流星雨', '富士山日出', '本栖湖']
+          },
+          {
+            id: 'd4-am-optB',
+            letter: 'B',
+            name: '住宿睡到自然醒 😴',
+            image: APP_IMAGES.villa,
+            summary: '留在住宿休息，養足精神再出發，08:30–11:30 一起悠閒吃早餐、整理行李。',
+            suitability: '適合長輩、小孩與想好好補眠放鬆的成員',
+            duration: '睡到自然醒',
+            cost: '免費休息',
+            needBooking: false,
+            tags: ['自然醒', '包棟休息', '長輩友善']
           }
         ]
       },
@@ -1725,132 +1845,148 @@
       {
         id: 'it-3-1',
         day: 3,
-        time: '09:30 - 12:00',
-        title: '山中湖平野之濱（天鵝湖畔與倒影富士山）',
-        japaneseName: '山中湖 平野の浜（逆さ富士・白鳥）',
+        time: '09:30 - 10:30',
+        title: '🚗 前往租車公司取車（開啟富士山自駕之旅）',
+        japaneseName: 'レンタカー貸渡手続き・出発',
         type: '共同活動',
-        duration: '停留 2.5 小時',
-        image: APP_IMAGES.farm,
-        summary: '富士五湖中海拔最高的山中湖，平野之濱沙灘能近距離看野生白天鵝，與白雪覆頂的富士倒影合影。',
-        details: '湖畔空氣清新，可購買飼料餵食不怕人的天鵝群。地勢平坦，極度適合散步拍照。',
-        location: '山梨県南都留郡山中湖村平野',
-        mapsUrl: 'https://maps.google.com/?q=Hirano+Beach+Yamanakako',
-        status: '免費參觀',
-        tags: ['倒影富士', '天鵝湖畔', '全家合影']
+        duration: '約 1 小時',
+        image: APP_IMAGES.fuji,
+        summary: '散步前往租車公司，辦理取車手續，10:00 正式開啟兩天的富士山自駕之旅！',
+        details: '共租借三台自駕車（已確認雪胎配備），取車後檢查車況與兒童安全座椅安裝，準備出發前往分組活動。',
+        location: '河口湖周邊租車公司',
+        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Station+Rent+a+Car',
+        status: '10:00 正式出發',
+        tags: ['三台自駕', '雪胎確認', '兩天租車']
       },
       {
         id: 'it-3-2',
         day: 3,
-        time: '12:30 - 13:45',
-        title: '午餐：名物手打蕎麥麵或山梨鄉土料理',
-        japaneseName: '手打ちそば 昼食',
-        type: '共同活動',
-        duration: '用餐 1.25 小時',
-        image: APP_IMAGES.villa,
-        summary: '品嚐富士山湧水手打蕎麥麵與酥脆野菜天婦羅，口味清爽道地。',
-        details: '備有熱蕎麥湯麵與冷沾麵，長輩習慣熟食熱食皆有貼心選擇。',
-        location: '山中湖周邊名店',
-        mapsUrl: 'https://maps.google.com/?q=Yamanakako+Soba',
-        status: '現場安排',
-        tags: ['手打蕎麥', '在地美味']
+        time: '11:00 - 14:00',
+        title: '🦁⛷️ 【A/B 分組】富士野生動物園 VS Snow Park YETI 滑雪',
+        japaneseName: '富士サファリパーク / スノーパークイエティ',
+        type: '分組活動',
+        duration: '約 3 小時',
+        image: APP_IMAGES.farm,
+        summary: 'A 組｜富士野生動物園 🦁（約 ¥3,200／人）：自駕近距離賞獅虎長頸鹿或搭 Jungle Bus；B 組｜Snow Park YETI ⛷️（約 ¥15,700／人含入場雪具雪衣）：富士山腳下滑雪初體驗！',
+        details: '兩組各自出發體驗，結束後陸續前往御殿場 Premium Outlets 會合。',
+        location: '裾野・富士山麓',
+        mapsUrl: 'https://maps.google.com/?q=Fuji+Safari+Park',
+        status: '分組登記中',
+        tags: ['富士野生動物園', 'Snow Park YETI', '自由分組']
       },
       {
         id: 'it-3-3',
         day: 3,
-        time: '14:15 - 17:30',
-        title: '【A/B 分組】御殿場 Outlet 暢快血拼 vs 富士御殿場蒸溜所品酩',
-        japaneseName: '午後選択プラン',
-        type: '分組活動',
-        duration: '約 3.25 小時',
-        image: APP_IMAGES.fuji,
-        summary: '血拼組暢逛日本最大暢貨中心（290+品牌冬特賣）；品酒風景組前往 Kirin 威士忌蒸溜所體驗見學與品酩。',
-        details: '傍晚專車將在御殿場市區會合，一同前往預訂好的居酒屋晚餐。',
-        location: '御殿場地區',
-        mapsUrl: 'https://maps.google.com/?q=Gotemba+Premium+Outlets',
-        status: '分組登記中',
-        tags: ['購物折扣', '威士忌品酩', '自由選擇']
-      },
-      {
-        id: 'it-3-4',
-        day: 3,
-        time: '18:30 - 20:30',
-        title: '晚餐：居酒屋さかなや 御殿場本店（名物海鮮饗宴）',
-        japaneseName: '居酒屋さかなや 御殿場本店',
+        time: '14:00 - 19:00',
+        title: '🛍️ 御殿場 Premium Outlets 會合購物',
+        japaneseName: '御殿場プレミアム・アウトレット',
         type: '共同活動',
-        duration: '用餐 2 小時',
-        image: APP_IMAGES.villa,
-        summary: '御殿場極受好評的海產居酒屋，每日由駿河灣沼津港直送新鮮刺身、烤魚與靜岡在地料理。',
-        details: '已排定 18:30 預約，備有獨立包廂供 11 位家庭成員舒適歡聚。',
-        location: '静岡県御殿場市東田中1-1-12',
-        mapsUrl: 'https://maps.google.com/?q=居酒屋さかなや+御殿場本店',
-        status: '已排定10月預訂',
-        tags: ['沼津直送海產', '家庭包廂', '靜岡在地名物']
+        duration: '營業至 19:00',
+        image: APP_IMAGES.fuji,
+        summary: '兩組依各自行程陸續前往 Outlet 會合，自由逛街、購物、吃美食！約 290 間店舖，還能欣賞富士山美景。',
+        details: '營業時間至 19:00，建議可於美食街或餐廳自行享用晚餐後駕車返回河口湖住宿休息。',
+        location: '静岡県御殿場市深沢1312',
+        mapsUrl: 'https://maps.google.com/?q=Gotemba+Premium+Outlets',
+        status: '營業至 19:00',
+        tags: ['290間店舖', '富士山美景', '自由購物美食']
       },
 
       // Day 4 (12/14 一)
       {
         id: 'it-4-1',
         day: 4,
-        time: '09:00 - 12:30',
-        title: '富士天滑雪場（ふじてん）初學滑雪 ＆ 親子雪盆樂園',
-        japaneseName: 'ふじてんスノーリゾート',
-        type: '共同活動',
-        duration: '停留 3.5 小時',
+        time: '04:00 - 07:30',
+        title: '🌠😴 【A/B 分組】A 組本栖湖追星日出 VS B 組睡到自然醒',
+        japaneseName: '本栖湖 星空・日の出 / 宿でゆっくり',
+        type: '分組活動',
+        duration: '約 3.5 小時',
         image: APP_IMAGES.fuji,
-        summary: '富士山腳下的絕美迷你雪場，具備專為初學者與親子規劃的雪盆樂園（ちびっこ愛ランド），安全好玩！',
-        details: '想滑雪的家人可租裝備體驗初級滑道，想休閒的家人可在雪盆專區堆雪人、玩滑雪盆，室內休息室暖氣充足。備案為 Yeti 滑雪場。',
-        location: '山梨県南都留郡鳴沢村字富士山8545-1',
-        mapsUrl: 'https://maps.google.com/?q=Fujiten+Snow+Resort',
-        status: '現場購票/租借',
-        tags: ['富士山下滑雪', '雪盆雪樂園', '老少皆宜']
+        summary: 'A 組凌晨前往本栖湖追流星雨尾巴、等待富士山晨光；B 組留在住宿休息，養足精神再出發。',
+        details: '凌晨本栖湖氣溫較低，A 組出發請務必穿戴羽絨衣、毛帽與手套做好保暖。',
+        location: '本栖湖 / Fuji Kurasu 心',
+        mapsUrl: 'https://maps.google.com/?q=Lake+Motosu',
+        status: '早晨自由選擇',
+        tags: ['流星雨尾巴', '富士山晨光', '自由分組']
       },
       {
         id: 'it-4-2',
         day: 4,
-        time: '13:00 - 14:15',
-        title: '午餐：名物餺飥鍋麵（不動ほうとう）熱騰騰野菜鍋',
-        japaneseName: 'ほうとう不動 河口湖店',
+        time: '08:30 - 11:30',
+        title: '🏡 返回住宿・早餐・補眠',
+        japaneseName: '朝食・休憩・荷物整理',
         type: '共同活動',
-        duration: '用餐 1.25 小時',
+        duration: '休息 3 小時',
         image: APP_IMAGES.villa,
-        summary: '滑完雪後最幸福的享受！大鐵鍋盛裝南瓜味噌自慢湯底與滿滿季節野菜手工寬麵，全身暖洋洋。',
-        details: '不動河口湖建築獨特如白色雲朵，內部空間挑高寬敞，極為舒適。',
-        location: '山梨県南都留郡富士河口湖町',
-        mapsUrl: 'https://maps.google.com/?q=Houtou+Fudou+Kawaguchiko',
-        status: '現場候位',
-        tags: ['冬日暖身', '山梨第一名物', '雲朵建築']
+        summary: 'A 組回住宿補眠，B 組悠閒起床。大家整理行李與隨身用品，準備下午一起出發。',
+        details: '整理好隨身物品與相機裝備，充飽電準備下午的忍野八海與鑽石富士重頭戲。',
+        location: 'Fuji Kurasu 心',
+        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Fuji+Kurasu',
+        status: '休息與集合',
+        tags: ['早餐補眠', '整理行李']
       },
       {
         id: 'it-4-3',
         day: 4,
-        time: '14:45 - 16:30',
-        title: '河口湖一日遊巡禮 ＆ 富士山世界遺產中心',
-        japaneseName: '静岡県富士山世界遺産センター',
+        time: '11:30 - 13:00',
+        title: '🍱 自由午餐・補充體力',
+        japaneseName: '自由昼食',
         type: '共同活動',
-        duration: '停留 1.75 小時',
-        image: APP_IMAGES.fuji,
-        summary: '建築大師坂茂設計的倒立富士山木造建築，水池映照出美麗正富士，必買超萌富士山三角錐伴手禮！',
-        details: '館內設有平緩上升的螺旋步道，走起來如同登富士山，沿途展示珍貴歷史與自然四季。',
-        location: '静岡県富士宮市宮町5-12',
-        mapsUrl: 'https://maps.google.com/?q=Mt.+Fuji+World+Heritage+Centre+Shizuoka',
-        status: '門票 ¥300 (長輩免費)',
-        tags: ['大師建築', '倒富士水池', '三角錐伴手禮']
+        duration: '用餐 1.5 小時',
+        image: APP_IMAGES.villa,
+        summary: '建議在河口湖或前往忍野八海途中用餐，避免下午拍攝時肚子餓。',
+        details: '可依當日動線選擇河口湖或忍野周邊餐廳，吃飽後準時於 13:00 抵達忍野八海。',
+        location: '河口湖～忍野周邊',
+        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Restaurants',
+        status: '彈性用餐',
+        tags: ['午餐時間', '補充體力']
       },
       {
         id: 'it-4-4',
         day: 4,
-        time: '17:30 - 20:30',
-        title: '返回 Fuji Kurasu 心 別墅溫馨火鍋之夜',
-        japaneseName: 'ヴィラで団らん鍋夕食',
+        time: '13:00 - 14:10',
+        title: '⛩️ 忍野八海',
+        japaneseName: '忍野八海',
         type: '共同活動',
-        duration: '整晚包棟放鬆',
-        image: APP_IMAGES.villa,
-        summary: '在河口湖包棟別墅的最後一晚！專車中途停靠在地生鮮超市，全家一起煮和牛豆乳鍋、泡溫泉暢聊。',
-        details: '大家可邊看富士山夜景邊享受不受外界打擾的私密家庭時光。',
-        location: 'Fuji Kurasu 心',
-        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Fuji+Kurasu',
-        status: '自煮/周邊居酒屋',
-        tags: ['家庭聚餐', '和牛火鍋', '溫泉放鬆']
+        duration: '停留約 70 分鐘',
+        image: APP_IMAGES.fuji,
+        summary: '逛逛日式村落、欣賞清澈湧泉，吃吃特色小食、拍拍富士山與茅草屋。',
+        details: '園區步道平緩好走，可品嚐現烤草餅、豆腐與湧泉名水，14:10 準時上車前往山中湖。',
+        location: '山梨県南都留郡忍野村忍草',
+        mapsUrl: 'https://maps.google.com/?q=Oshino+Hakkai',
+        status: '免費參觀',
+        tags: ['清澈湧泉', '茅草屋', '富士山合影']
+      },
+      {
+        id: 'it-4-5',
+        day: 4,
+        time: '14:30 - 15:50',
+        title: '💎 山中湖花之都公園周邊（挑戰「鑽石富士」）',
+        japaneseName: '山中湖花の都公園周辺（ダイヤモンド富士）',
+        type: '共同活動',
+        duration: '停留約 80 分鐘',
+        image: APP_IMAGES.fuji,
+        summary: '冬季限定重頭戲！等待夕陽落向富士山頂，挑戰拍下「鑽石富士」！目標約 15:22 前後，實際時間與位置需依當日觀測條件確認。',
+        details: '15:50 準時集合啟程返回河口湖，以免延誤還車時間。',
+        location: '山梨県南都留郡山中湖村山中1650',
+        mapsUrl: 'https://maps.google.com/?q=Yamanakako+Hananomiyako+Park',
+        status: '冬季限定重頭戲',
+        tags: ['鑽石富士', '15:22前後', '夕陽美景']
+      },
+      {
+        id: 'it-4-6',
+        day: 4,
+        time: '15:50 - 18:00',
+        title: '🚗 返回河口湖：加油、歸還三台租車',
+        japaneseName: '給油・レンタカー返却（3台）',
+        type: '共同活動',
+        duration: '預留 2 小時 10 分',
+        image: APP_IMAGES.fuji,
+        summary: '預留交通、加油與還車手續時間。長池親水公園不列為必去，避免延誤還車。',
+        details: '請於還車前將三台車加滿油並保留加油收據，辦理完還車手續後返回住宿休息。',
+        location: '河口湖租車公司',
+        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Station',
+        status: '務必準時還車',
+        tags: ['加滿油', '歸還三台車', '預留緩衝']
       },
 
       // Day 5 (12/15 二)
@@ -1890,17 +2026,17 @@
         id: 'it-5-3',
         day: 5,
         time: '15:00 - 16:00',
-        title: '抵達東京市區飯店 Check-in 放置行李',
-        japaneseName: '東京ホテルチェックイン',
+        title: '抵達「美滿如家 池袋」Check-in 放置行李',
+        japaneseName: 'MIMARU東京 池袋 チェックイン',
         type: '共同活動',
         duration: '辦理入住 1 小時',
         image: APP_IMAGES.shibuya,
-        summary: '專車直達東京飯店，協助大家辦理入住並放好行李，稍作梳洗休息準備迎接震撼東京夜景。',
-        details: '連通房與家庭房分配，鄰近澀谷與表參道，地理位置優越。',
-        location: '東京都心精選飯店',
-        mapsUrl: 'https://maps.google.com/?q=Shibuya+Tokyo',
-        status: '已排定入住',
-        tags: ['飯店Check-in', '東京連住3晚']
+        summary: '專車直達美滿如家 池袋（MIMARU TOKYO IKEBUKURO），協助大家辦理入住並放好行李，稍作休息準備迎接東京夜景。',
+        details: '公寓式家庭飯店，房內配備寬敞客廳與簡易廚房，適合家族連住 3 晚（12/15–12/18）。',
+        location: '美滿如家 池袋 (MIMARU TOKYO IKEBUKURO)',
+        mapsUrl: 'https://maps.google.com/?q=MIMARU+TOKYO+IKEBUKURO',
+        status: '已確認入住',
+        tags: ['美滿如家池袋', 'MIMARU', '東京連住3晚']
       },
       {
         id: 'it-5-4',
@@ -2334,7 +2470,8 @@
       groupSlots: loadState('groupSlots', DEFAULT_GROUP_SLOTS),
       userChoices: loadState('userChoices', {
         'd2-pm': { 'm5': 'd2-pm-optA', 'm7': 'd2-pm-optA', 'm11': 'd2-pm-optA', 'm1': 'd2-pm-optB', 'm2': 'd2-pm-optB', 'm3': 'd2-pm-optB', 'm4': 'd2-pm-optB', 'm12': 'd2-pm-optB' },
-        'd3-pm': { 'm1': 'd3-pm-optA', 'm2': 'd3-pm-optA', 'm5': 'd3-pm-optA', 'm3': 'd3-pm-optB', 'm4': 'd3-pm-optB', 'm7': 'd3-pm-optB' },
+        'd3-pm': { 'm1': 'd3-pm-optA', 'm2': 'd3-pm-optA', 'm3': 'd3-pm-optA', 'm4': 'd3-pm-optA', 'm12': 'd3-pm-optA', 'm5': 'd3-pm-optB', 'm7': 'd3-pm-optB' },
+        'd4-am': { 'm5': 'd4-am-optA', 'm7': 'd4-am-optA', 'm1': 'd4-am-optB', 'm2': 'd4-am-optB', 'm3': 'd4-am-optB', 'm4': 'd4-am-optB', 'm12': 'd4-am-optB' },
         'd5-am': { 'm1': 'd5-am-optA', 'm2': 'd5-am-optA', 'm3': 'd5-am-optA', 'm4': 'd5-am-optA', 'm5': 'd5-am-optB', 'm7': 'd5-am-optB' }
       }),
       itinerary: loadState('itinerary', DEFAULT_ITINERARY),
@@ -2730,6 +2867,9 @@
                       </button>
                     ` : ''}
                     ${state.isAdminAuthenticated ? `
+                      <button onclick="openItineraryEditModal('${item.id}')" class="px-2 py-1 rounded-lg bg-fuji-50 hover:bg-fuji-100 text-fuji-700 font-semibold transition text-[11px]" title="編輯此行程內容">
+                        ✏️ 編輯
+                      </button>
                       <button onclick="openLinkAttractionModal('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition text-[11px]" title="設定連動景點或圖片">
                         🔗 連動
                       </button>
@@ -3156,6 +3296,108 @@
         const cleanName = a.name.split('（')[0].trim().toLowerCase();
         return (cleanName.length >= 2 && t.includes(cleanName)) || (a.japanese && t.includes(a.japanese.toLowerCase()));
       }) || null;
+    }
+
+    function openItineraryEditModal(itemId) {
+      if (!state.isAdminAuthenticated) {
+        showToast('此編輯功能僅限「系統管理者」於管理後台登入後操作', 'warn');
+        return;
+      }
+      const modal = document.getElementById('itineraryEditModal');
+      const delBtn = document.getElementById('itDeleteBtn');
+      if (itemId) {
+        const item = state.itinerary.find(i => i.id === itemId);
+        if (!item) return;
+        document.getElementById('itModalHeader').textContent = `編輯 DAY ${item.day} 行程`;
+        document.getElementById('itEditId').value = item.id;
+        document.getElementById('itEditDay').value = String(item.day);
+        document.getElementById('itEditTime').value = item.time || '';
+        document.getElementById('itEditDuration').value = item.duration || '';
+        document.getElementById('itEditTitle').value = item.title || '';
+        document.getElementById('itEditJp').value = item.japaneseName || '';
+        document.getElementById('itEditType').value = item.type || '共同活動';
+        document.getElementById('itEditStatus').value = item.status || '';
+        document.getElementById('itEditSummary').value = item.summary || '';
+        document.getElementById('itEditDetails').value = item.details || '';
+        document.getElementById('itEditLocation').value = item.location || '';
+        document.getElementById('itEditMapsUrl').value = item.mapsUrl || '';
+        delBtn.classList.remove('hidden');
+      } else {
+        document.getElementById('itModalHeader').textContent = `新增 DAY ${state.activeDay} 行程`;
+        document.getElementById('itEditId').value = '';
+        document.getElementById('itEditDay').value = String(state.activeDay);
+        document.getElementById('itEditTime').value = '14:00 - 15:30';
+        document.getElementById('itEditDuration').value = '停留 1.5 小時';
+        document.getElementById('itEditTitle').value = '';
+        document.getElementById('itEditJp').value = '';
+        document.getElementById('itEditType').value = '共同活動';
+        document.getElementById('itEditStatus').value = '行程規劃';
+        document.getElementById('itEditSummary').value = '';
+        document.getElementById('itEditDetails').value = '';
+        document.getElementById('itEditLocation').value = '';
+        document.getElementById('itEditMapsUrl').value = '';
+        delBtn.classList.add('hidden');
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closeItineraryEditModal() {
+      document.getElementById('itineraryEditModal').classList.add('hidden');
+    }
+
+    function saveItineraryItem() {
+      const editId = document.getElementById('itEditId').value;
+      const title = document.getElementById('itEditTitle').value.trim();
+      const time = document.getElementById('itEditTime').value.trim();
+      if (!title || !time) {
+        showToast('請輸入「時段」與「行程標題」', 'warn');
+        return;
+      }
+      const day = parseInt(document.getElementById('itEditDay').value) || 1;
+      const existing = editId ? state.itinerary.find(i => i.id === editId) : null;
+      const itemObj = {
+        id: editId || ('it-' + day + '-' + Date.now()),
+        day,
+        time,
+        title,
+        japaneseName: document.getElementById('itEditJp').value.trim(),
+        type: document.getElementById('itEditType').value,
+        duration: document.getElementById('itEditDuration').value.trim() || '依現場安排',
+        summary: document.getElementById('itEditSummary').value.trim(),
+        details: document.getElementById('itEditDetails').value.trim(),
+        location: document.getElementById('itEditLocation').value.trim(),
+        mapsUrl: document.getElementById('itEditMapsUrl').value.trim() || `https://maps.google.com/?q=${encodeURIComponent(title)}`,
+        status: document.getElementById('itEditStatus').value.trim() || '已排定',
+        image: existing?.image || APP_IMAGES.fuji,
+        tags: existing?.tags || [],
+        attractionId: existing?.attractionId || ''
+      };
+
+      if (existing) {
+        const idx = state.itinerary.findIndex(i => i.id === editId);
+        state.itinerary[idx] = itemObj;
+      } else {
+        state.itinerary.push(itemObj);
+      }
+
+      state.itinerary.sort((a, b) => (a.day - b.day) || a.time.localeCompare(b.time));
+      saveState('itinerary', state.itinerary);
+      postToCloud({ action: 'seedItinerary', itinerary: state.itinerary });
+      closeItineraryEditModal();
+      state.activeDay = day;
+      renderItinerary();
+      showToast(`已儲存 DAY ${day}「${title}」並同步至雲端！`, 'success');
+    }
+
+    function deleteItineraryItem() {
+      const editId = document.getElementById('itEditId').value;
+      if (!editId) return;
+      state.itinerary = state.itinerary.filter(i => i.id !== editId);
+      saveState('itinerary', state.itinerary);
+      postToCloud({ action: 'seedItinerary', itinerary: state.itinerary });
+      closeItineraryEditModal();
+      renderItinerary();
+      showToast('已刪除此行程並同步至雲端', 'info');
     }
 
     function openLinkAttractionModal(itemId) {
@@ -4317,6 +4559,7 @@
         document.getElementById('adminLockIcon').classList.add('text-emerald-500');
         renderAdminMemberList();
         document.getElementById('addFixedExpenseBtn')?.classList.remove('hidden');
+        document.getElementById('addItineraryBtn')?.classList.remove('hidden');
         document.getElementById('addAttractionBtn')?.classList.remove('hidden');
         renderItinerary();
         renderAttractions(activeAttractionCategory);
@@ -4334,6 +4577,7 @@
       document.getElementById('adminUnlockedState').classList.add('hidden');
       document.getElementById('adminLockIcon').classList.remove('text-emerald-500');
       document.getElementById('addFixedExpenseBtn')?.classList.add('hidden');
+      document.getElementById('addItineraryBtn')?.classList.add('hidden');
       document.getElementById('addAttractionBtn')?.classList.add('hidden');
       renderItinerary();
       renderAttractions(activeAttractionCategory);
