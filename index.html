@@ -350,7 +350,7 @@
                 </svg>
                 Google Maps 導航
               </a>
-              <button onclick="openVideoModal('【PV】Unforgettable Family Stay: Fuji Kurasu 心', 'https://www.youtube.com/embed/dQw4w9WgXcQ')" class="text-slate-600 hover:text-fuji-700 flex items-center">
+              <button onclick="openHomeVillaVideo()" class="text-slate-600 hover:text-fuji-700 flex items-center">
                 <svg class="w-3.5 h-3.5 mr-1 text-rose-500" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
                 </svg>
@@ -497,10 +497,10 @@
           DAY 2 下午 (12/12) 飛行傘 vs 牧場動物
         </button>
         <button onclick="selectGroupSlot('d3-pm')" id="slotTab-d3-pm" class="slot-tab-btn px-3 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 shadow-2xs whitespace-nowrap transition">
-          DAY 3 下午 (12/13) Outlet血拼 vs 倒富士品酒
+          DAY 3 自由分組 (12/13) 動物派 vs 滑雪派
         </button>
-        <button onclick="selectGroupSlot('d5-am')" id="slotTab-d5-am" class="slot-tab-btn px-3 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 shadow-2xs whitespace-nowrap transition">
-          DAY 5 上午 (12/15) 巢鴨老街 vs 潮流購物
+        <button onclick="selectGroupSlot('d4-am')" id="slotTab-d4-am" class="slot-tab-btn px-3 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 shadow-2xs whitespace-nowrap transition">
+          DAY 4 早晨 (12/14) 追星日出 vs 睡到自然醒
         </button>
       </div>
 
@@ -2319,7 +2319,7 @@
         mapsUrl: 'https://maps.google.com/?q=Oishi+Park',
         officialUrl: 'https://oishipark.com/',
         videoTitle: '河口湖大石公園 冬季絕景導覽',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+        videoUrl: ''
       },
       {
         id: 'att-2',
@@ -2337,7 +2337,7 @@
         mapsUrl: 'https://maps.google.com/?q=Asagiri+Kogen+Paragliding',
         officialUrl: 'https://asagiri-para.com/',
         videoTitle: '富士山雙人傘高空飛行震撼直擊',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+        videoUrl: ''
       },
       {
         id: 'att-3',
@@ -2355,25 +2355,7 @@
         mapsUrl: 'https://maps.google.com/?q=Makaino+Farm',
         officialUrl: 'https://www.makaino.com/',
         videoTitle: '馬飼野牧場 療癒餵羊與富士山盪鞦韆',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-      },
-      {
-        id: 'att-4',
-        name: 'SHIBUYA SKY 展望台',
-        japanese: '渋谷スカイ',
-        category: 'tokyo',
-        image: APP_IMAGES.shibuya,
-        shortDesc: '澀谷最高地標！47層頂樓 229 公尺露天甲板，360 度俯瞰東京壯麗都市與富士日落。',
-        fullDesc: '位於澀谷爭道交叉口正上方，是全東京最火紅的觀景設施。搭乘「體感電梯」直達頂樓，穿過室內燈光藝術空間來到無邊際天際甲板。傍晚 16:30 場次能一次收藏日落晚霞、富士山剪影與點燈後的百萬繁華夜景。',
-        highlights: '網美轉角沙發、天網拍照區、俯瞰十字路口人潮、室內外無障礙電梯。',
-        suitability: ['必訪地標', '全視角夜景', '老少皆宜'],
-        stayTime: '1.5 ~ 2 小時',
-        cost: '約 ¥2,200 ~ 2,500 / 人 (網路預約優惠)',
-        hours: '10:00 - 22:30 (最後入場 21:20)',
-        mapsUrl: 'https://maps.google.com/?q=SHIBUYA+SKY',
-        officialUrl: 'https://www.shibuya-scramble-square.com/sky/',
-        videoTitle: 'SHIBUYA SKY 黃金日落至夜景絕美視角',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+        videoUrl: ''
       },
       {
         id: 'att-5',
@@ -2391,25 +2373,7 @@
         mapsUrl: 'https://maps.google.com/?q=Fuji+Kurasu+Kokoro',
         officialUrl: 'https://fuji-kurasu.com/',
         videoTitle: '【PV】Fuji Kurasu 心 奢華木屋開箱介紹',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-      },
-      {
-        id: 'att-6',
-        name: '居酒屋さかなや 御殿場本店',
-        japanese: '居酒屋さかなや 御殿場本店',
-        category: 'food',
-        image: APP_IMAGES.villa,
-        shortDesc: '御殿場超人氣海產居酒屋，駿河灣每日新鮮海產直送，特選黑毛和牛與家庭榻榻米包廂。',
-        fullDesc: '由魚販起家的專業海鮮居酒屋，食材鮮度無可挑剔。刺身拼盤鮮甜厚切、香烤金目鯛、天婦羅及靜岡在地名物黑竹輪，餐點選擇極多，不管是喜愛生食海鮮的年輕人還是習慣熟食溫熱湯物的長輩都能大飽口福。',
-        highlights: '獨立家庭包廂、兒童友善菜單、豐富靜岡在地地酒。',
-        suitability: ['家庭包廂', '極鮮海產', '需事先預約'],
-        stayTime: '2 小時歡聚',
-        cost: '預估約 ¥4,000 ~ 6,000 / 人',
-        hours: '17:00 - 23:00 (預訂 18:30)',
-        mapsUrl: 'https://maps.google.com/?q=居酒屋さかなや+御殿場本店',
-        officialUrl: 'https://sakanaya6888.com/',
-        videoTitle: '御殿場さかなや 爆量海鮮生魚片直擊',
-        videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+        videoUrl: ''
       }
     ];
 
@@ -2460,6 +2424,11 @@
       }
     }
 
+    if (!localStorage.getItem('tokyo_fuji_travel_migrated_20261117')) {
+      ['attractions', 'groupSlots', 'itinerary', 'userChoices'].forEach(k => localStorage.removeItem('tokyo_fuji_travel_' + k));
+      localStorage.setItem('tokyo_fuji_travel_migrated_20261117', '1');
+    }
+
     const state = {
       activeView: 'home',
       activeDay: 1,
@@ -2467,12 +2436,11 @@
       currentMemberId: 'm5', // 預設維柔 (召集人)
       activeSlotId: 'd2-pm',
       members: (() => { const m = loadState('members', DEFAULT_MEMBERS); return m.some(x => x.id === 'm9' || x.avatar === '👵' || x.avatar === '👴' || x.avatar === '👩‍🦳' || x.relation === '召集人') ? DEFAULT_MEMBERS : m; })(),
-      groupSlots: loadState('groupSlots', DEFAULT_GROUP_SLOTS),
+      groupSlots: (() => { const g = loadState('groupSlots', DEFAULT_GROUP_SLOTS); return (!g['d4-am'] || (g['d3-pm'] && g['d3-pm'].options[0].name.includes('OUTLETS'))) ? DEFAULT_GROUP_SLOTS : g; })(),
       userChoices: loadState('userChoices', {
         'd2-pm': { 'm5': 'd2-pm-optA', 'm7': 'd2-pm-optA', 'm11': 'd2-pm-optA', 'm1': 'd2-pm-optB', 'm2': 'd2-pm-optB', 'm3': 'd2-pm-optB', 'm4': 'd2-pm-optB', 'm12': 'd2-pm-optB' },
         'd3-pm': { 'm1': 'd3-pm-optA', 'm2': 'd3-pm-optA', 'm3': 'd3-pm-optA', 'm4': 'd3-pm-optA', 'm12': 'd3-pm-optA', 'm5': 'd3-pm-optB', 'm7': 'd3-pm-optB' },
-        'd4-am': { 'm5': 'd4-am-optA', 'm7': 'd4-am-optA', 'm1': 'd4-am-optB', 'm2': 'd4-am-optB', 'm3': 'd4-am-optB', 'm4': 'd4-am-optB', 'm12': 'd4-am-optB' },
-        'd5-am': { 'm1': 'd5-am-optA', 'm2': 'd5-am-optA', 'm3': 'd5-am-optA', 'm4': 'd5-am-optA', 'm5': 'd5-am-optB', 'm7': 'd5-am-optB' }
+        'd4-am': { 'm5': 'd4-am-optA', 'm7': 'd4-am-optA', 'm1': 'd4-am-optB', 'm2': 'd4-am-optB', 'm3': 'd4-am-optB', 'm4': 'd4-am-optB', 'm12': 'd4-am-optB' }
       }),
       itinerary: loadState('itinerary', DEFAULT_ITINERARY),
       attractions: loadState('attractions', DEFAULT_ATTRACTIONS),
@@ -3544,6 +3512,22 @@
         return { type: 'yt', embedUrl: `https://www.youtube.com/embed/${ytId}`, rawUrl: u };
       }
       return { type: 'other', embedUrl: u, rawUrl: u };
+    }
+
+    function openHomeVillaVideo() {
+      const villa = state.attractions.find(a => a.id === 'att-6' || a.name.includes('Fuji Kurasu'));
+      const url = villa ? (villa.videoUrl || '') : '';
+      const title = villa ? (villa.videoTitle || villa.name) : 'Fuji Kurasu 心 住宿開箱';
+      if (!url.trim()) {
+        if (state.isAdminAuthenticated && villa) {
+          showToast('尚未設定開箱影片，已為您開啟編輯視窗，請貼上 YT 或 IG 連結！', 'info');
+          openAttractionEditModal(villa.id);
+        } else {
+          showToast('尚未設定開箱影片，請系統管理者登入後至「景點與影片 ➔ Fuji Kurasu 心」貼上 YT／IG 連結！', 'info');
+        }
+        return;
+      }
+      openVideoModal(title, url);
     }
 
     function openVideoModal(title, url) {
