@@ -486,24 +486,52 @@
       </div>
 
       <!-- TIMELINE CARDS LIST -->
-      <!-- 今日集合提醒 (湖水淺藍 #B9E0F5) -->
-      <div id="dailyGatheringBanner" class="bg-[#B9E0F5]/70 border border-[#6BA8CF]/50 rounded-2xl p-3.5 flex items-start space-x-3 text-[#243F60]">
-        <div class="w-8 h-8 rounded-xl bg-[#17628F] text-white flex items-center justify-center shrink-0 mt-0.5">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <div class="min-w-0 flex-1">
-          <div class="flex items-center space-x-2">
-            <span class="text-xs font-bold text-[#243F60]">今日集合與出發重點</span>
-            <span id="gatheringDayBadge" class="font-hand text-xs font-bold text-[#17628F] bg-white/80 px-2 py-0.2 rounded-full">Day 1</span>
+      <!-- 今日集合提醒 (湖水淺藍 #B9E0F5，含一鍵導航) -->
+      <div id="dailyGatheringBanner" class="bg-[#B9E0F5]/80 border border-[#6BA8CF]/50 rounded-2xl p-4 text-[#243F60] shadow-2xs">
+        <div class="flex items-start space-x-3">
+          <div class="shrink-0 pt-0.5">
+            <div id="gatheringTimeBig" class="text-base sm:text-lg font-black text-[#243F60] tracking-tight leading-none">--:--</div>
+            <span id="gatheringDayBadge" class="inline-block font-hand text-xs font-bold text-[#17628F] mt-1">Day 1</span>
           </div>
-          <p id="dailyGatheringText" class="text-xs text-[#243F60] mt-1 font-medium leading-relaxed"></p>
+          <div class="min-w-0 flex-1 space-y-1.5">
+            <div id="gatheringTitleText" class="text-sm font-bold text-[#243F60] leading-snug">今日集合與出發重點</div>
+            <p id="dailyGatheringText" class="text-xs text-[#243F60]/90 leading-relaxed"></p>
+            <div class="pt-1">
+              <a id="gatheringMapsBtn" href="#" target="_blank" class="inline-flex items-center px-3.5 py-1.5 bg-[#17628F] hover:bg-[#243F60] text-white rounded-lg text-xs font-bold shadow-2xs transition">
+                Google Maps 導航
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div id="timelineCardsContainer" class="space-y-1">
-        <!-- Rendered dynamically via JS -->
+      <!-- 日系手繪富士山公路風景時間軸畫布 -->
+      <div class="relative rounded-3xl bg-[#F8FBFD] border border-[#DCEBF5] p-3 sm:p-5 overflow-hidden shadow-xs">
+        <!-- 手繪冬季富士山、松樹、湖泊與蜿蜒公路 SVG 背景 -->
+        <svg class="absolute inset-0 w-full h-full pointer-events-none select-none" preserveAspectRatio="xMidYMid slice" viewBox="0 0 420 800" fill="none">
+          <!-- Soft Sky Dots / Snow -->
+          <circle cx="65" cy="70" r="2" fill="#B9E0F5"/>
+          <circle cx="350" cy="110" r="2.5" fill="#B9E0F5"/>
+          <circle cx="195" cy="48" r="1.8" fill="#6BA8CF" opacity="0.5"/>
+          <!-- Distant Fuji Silhouette Left-Mid -->
+          <path d="M -10 355 L 78 245 L 98 262 L 118 245 L 205 355 Z" fill="#DCEBF5" opacity="0.85"/>
+          <path d="M 78 245 L 98 262 L 118 245 L 108 274 L 88 274 Z" fill="#FFFFFF"/>
+          <path d="M 10 358 Q 85 349 165 358" stroke="#6BA8CF" stroke-width="1.5" opacity="0.45"/>
+          <!-- Pine Trees Right -->
+          <path d="M 355 240 L 372 190 L 389 240 Z" fill="#B9E0F5" opacity="0.65"/>
+          <path d="M 378 255 L 393 212 L 408 255 Z" fill="#83A9C4" opacity="0.45"/>
+          <path d="M 332 252 L 346 216 L 360 252 Z" fill="#DCEBF5" opacity="0.8"/>
+          <!-- Pine Trees Bottom Left -->
+          <path d="M 24 690 L 40 645 L 56 690 Z" fill="#B9E0F5" opacity="0.6"/>
+          <path d="M 48 705 L 62 665 L 76 705 Z" fill="#83A9C4" opacity="0.4"/>
+          <!-- Winding Gray-Blue S-Curve Road -->
+          <path d="M 120 35 C 120 155, 315 160, 315 290 C 315 420, 105 430, 105 565 C 105 685, 290 700, 290 800" stroke="#83A9C4" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.35"/>
+          <path d="M 120 35 C 120 155, 315 160, 315 290 C 315 420, 105 430, 105 565 C 105 685, 290 700, 290 800" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 10" stroke-linecap="round" fill="none" opacity="0.85"/>
+        </svg>
+
+        <div id="timelineCardsContainer" class="relative z-10 space-y-5 py-1">
+          <!-- Rendered dynamically via JS -->
+        </div>
       </div>
 
     </section>
@@ -535,10 +563,10 @@
           DAY 2 下午 (12/12) 飛行傘 vs 牧場動物
         </button>
         <button onclick="selectGroupSlot('d3-pm')" id="slotTab-d3-pm" class="slot-tab-btn px-3 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 shadow-2xs whitespace-nowrap transition">
-          DAY 3 自由分組 (12/13) 動物派 vs 滑雪派
+          DAY 3 分組 (12/13) Outlet逛街 vs Yeti滑雪
         </button>
         <button onclick="selectGroupSlot('d4-am')" id="slotTab-d4-am" class="slot-tab-btn px-3 py-2 rounded-xl text-xs font-bold bg-white border border-slate-200 text-slate-700 shadow-2xs whitespace-nowrap transition">
-          DAY 4 早晨 (12/14) 追星日出 vs 睡到自然醒
+          DAY 4 早晨 (12/14) 追星日出 vs 枕頭山
         </button>
       </div>
 
@@ -1584,786 +1612,662 @@
         id: 'd2-pm',
         day: 2,
         title: 'DAY 2 下午時段分組 (12/12)',
-        time: '13:30 - 16:30',
-        commonContext: '上午全員共訪大石公園與 Café Shizen，下午分組體驗，傍晚 16:30 集合前往白絲瀑布。',
+        time: '時間待定 (下午)',
+        commonContext: '上午大石公園與 Café Shizen 午餐後分開體驗，傍晚會合前往田貫湖看紅富士。',
         options: [
           {
             id: 'd2-pm-optA',
             letter: 'A',
-            name: '富士山雙人傘飛行體驗 (Tandem Paragliding)',
+            name: '朝霧富士山滑翔翼體驗',
             image: APP_IMAGES.paragliding,
-            summary: '在朝霧高原乘風翱翔，由合格教練一對一帶領，高空俯瞰白雪富士山與駿河灣壯麗全景。',
-            suitability: '適合喜愛冒險體驗、俯瞰高空壯麗絕景的成員',
-            duration: '約 2.5 小時 (含著裝講習)',
-            cost: '約 ¥15,000 / 人 (現場付費)',
+            summary: 'Mt.Fuji 富士山滑翔翼高空飛行體驗。',
+            suitability: '適合喜愛冒險體驗的成員',
+            duration: '時間待定',
+            cost: '約 ¥15,000 / 人',
             needBooking: true,
-            maxSlots: 6,
-            tags: ['刺激冒險', '富士絕景', '教練帶飛', '需預約']
+            tags: ['滑翔翼', '需預約']
           },
           {
             id: 'd2-pm-optB',
             letter: 'B',
-            name: '馬飼野牧場 × 富士野生動物園悠閒散策',
+            name: '馬飼野牧場悠閒派',
             image: APP_IMAGES.farm,
-            summary: '綿羊悠閒漫步草地、品嚐生乳冰淇淋與起司，搭乘叢林巴士近距離餵食動物，步道平緩舒適。',
-            suitability: '適合喜愛悠閒漫步、草地動物互動的放鬆行程',
-            duration: '約 2.5 ~ 3 小時',
-            cost: '門票約 ¥1,200 ~ 2,500 / 人',
+            summary: '在富士山下遛羊、牧場散步與享用生乳點心。',
+            suitability: '適合長輩、親子與喜愛悠閒步調的成員',
+            duration: '時間待定',
+            cost: '依現場門票',
             needBooking: false,
-            maxSlots: 12,
-            tags: ['自然放鬆', '動物互動', '平緩步道', '全家合適']
+            tags: ['牧場散策', '親子友善']
           }
         ]
       },
       'd3-pm': {
         id: 'd3-pm',
         day: 3,
-        title: 'DAY 3 自由分組：動物派 VS 滑雪派 (12/13)',
-        time: '11:00 - 14:00',
-        commonContext: '09:30 取車開啟富士山自駕之旅，11:00 分組體驗動物園或滑雪，14:00 起陸續前往御殿場 Premium Outlets 會合購物。',
+        title: 'DAY 3 自由分組：逛街派 VS 滑雪派 (12/13)',
+        time: '時間待定 (午/下午)',
+        commonContext: '上午租車、富士御殿場蒸溜所與富士野生動物園後，下午分流逛街或滑雪。',
         options: [
           {
             id: 'd3-pm-optA',
             letter: 'A',
-            name: '富士野生動物園 🦁（自駕／Jungle Bus）',
-            image: APP_IMAGES.farm,
-            summary: '自駕進入野生動物世界，近距離欣賞獅子、老虎、長頸鹿等動物，也可以體驗特色 Jungle Bus！',
-            suitability: '適合親子同樂、喜愛動物與輕鬆自駕觀賞的成員',
-            duration: '約 2.5 ~ 3 小時',
-            cost: '約 ¥3,200／人（特殊遊園體驗另計）',
+            name: '逛街派｜御殿場 PREMIUM OUTLETS',
+            image: APP_IMAGES.fuji,
+            summary: '暢逛約 290 間品牌店舖，邊逛街邊欣賞富士山美景。',
+            suitability: '適合喜愛購物逛街與美食的成員',
+            duration: '時間待定',
+            cost: '依個人消費',
             needBooking: false,
-            tags: ['野生動物園', 'Jungle Bus', '親子首選']
+            tags: ['Outlet購物', '自由活動']
           },
           {
             id: 'd3-pm-optB',
             letter: 'B',
-            name: 'Snow Park YETI ⛷️（富士山腳下滑雪初體驗）',
+            name: '滑雪派｜Fujiyama Snow Resort Yeti',
             image: APP_IMAGES.fuji,
-            summary: '富士山腳下的滑雪初體驗！租借雪具、換上雪衣，提前感受滑雪樂趣！',
-            suitability: '適合想體驗滑雪、玩雪與雪景拍照的成員',
-            duration: '約 3 小時',
-            cost: '約 ¥15,700／人（含入場、雪具及雪衣）',
+            summary: '富士山腳下 Yeti 滑雪場體驗，租借雪具與雪衣享受滑雪樂趣。',
+            suitability: '適合想體驗滑雪與玩雪的成員',
+            duration: '時間待定',
+            cost: '場地與裝備租借依現場公告',
             needBooking: false,
-            tags: ['滑雪體驗', '雪具租借', '富士山雪場']
+            tags: ['Yeti滑雪場', '滑雪體驗']
           }
         ]
       },
       'd4-am': {
         id: 'd4-am',
         day: 4,
-        title: 'DAY 4 早晨自由選擇：追星日出 VS 睡到自然醒 (12/14)',
-        time: '04:00 - 07:30',
-        commonContext: '凌晨可選擇前往本栖湖追流星雨尾巴與富士山晨光，或留在住宿睡到自然醒；08:30–11:30 全員回住宿早餐補眠。',
+        title: 'DAY 4 早晨分組：追流星日出 VS 枕頭山繼續爬 (12/14)',
+        time: '時間待定 (清晨)',
+        commonContext: '凌晨可選擇出發追流星雨與富士山日出，或留在被窩裡睡到自然醒。',
         options: [
           {
             id: 'd4-am-optA',
             letter: 'A',
-            name: '本栖湖追星日出 🌠',
+            name: '追流星的尾巴，迎接富士山日出',
             image: APP_IMAGES.fuji,
-            summary: '凌晨前往本栖湖追流星雨尾巴、等待富士山晨光！',
-            suitability: '適合早起熱血、想拍星空與日出大景的成員',
-            duration: '約 3.5 小時',
-            cost: '免費參觀（請注意保暖）',
+            summary: '早起出發迎接富士山晨光與雙子座流星雨尾巴。',
+            suitability: '適合早起拍日出星空的成員',
+            duration: '清晨時段',
+            cost: '免費（請注意保暖）',
             needBooking: false,
-            tags: ['流星雨', '富士山日出', '本栖湖']
+            tags: ['富士山日出', '流星雨']
           },
           {
             id: 'd4-am-optB',
             letter: 'B',
-            name: '住宿睡到自然醒 😴',
+            name: '留在被窩裡，枕頭山繼續爬',
             image: APP_IMAGES.villa,
-            summary: '留在住宿休息，養足精神再出發，08:30–11:30 一起悠閒吃早餐、整理行李。',
-            suitability: '適合長輩、小孩與想好好補眠放鬆的成員',
-            duration: '睡到自然醒',
+            summary: '在溫暖的河口湖住宿睡到自然醒，養足精神。',
+            suitability: '適合想好好休息補眠的成員',
+            duration: '自然醒',
             cost: '免費休息',
             needBooking: false,
-            tags: ['自然醒', '包棟休息', '長輩友善']
-          }
-        ]
-      },
-      'd6-am': {
-        id: 'd6-am',
-        day: 6,
-        title: 'DAY 6 上午時段分組 (12/16)',
-        time: '09:30 - 12:30',
-        commonContext: '東京市區精選路線，各自漫遊後中午於表參道周邊會合共進午餐。',
-        options: [
-          {
-            id: 'd6-am-optA',
-            letter: 'A',
-            name: '巢鴨地藏通老街祈福 × 六義園和風漫步',
-            image: APP_IMAGES.villa,
-            summary: '造訪高岩寺拔刺地藏尊祈福、品嚐現做鹽大福老舖，漫步回遊式大名庭園六義園，感受江戶典雅。',
-            suitability: '平坦好逛、充滿濃厚下町人情味與傳統點心，全家漫步首選',
-            duration: '約 3 小時',
-            cost: '庭園門票 ¥300 / 人',
-            needBooking: false,
-            maxSlots: 12,
-            tags: ['下町風情', '祈福地藏', '傳統菓子', '江戶名園']
-          },
-          {
-            id: 'd6-am-optB',
-            letter: 'B',
-            name: '原宿竹下通潮流選品 × 惠比壽花園廣場',
-            image: APP_IMAGES.shibuya,
-            summary: '探訪原宿年輕潮流選品、個性雜貨與可麗餅，隨後前往惠比壽探訪嶄新精釀啤酒體驗。',
-            suitability: '適合熱愛流行服飾選品、精品街區與品味精釀的旅伴',
-            duration: '約 3 小時',
-            cost: '依個人消費',
-            needBooking: false,
-            maxSlots: 12,
-            tags: ['潮流設計', '原宿竹下通', '啤酒紀念館', '熱門打卡']
-          }
-        ]
-      },
-      'd7-am': {
-        id: 'd7-am',
-        day: 7,
-        title: 'DAY 7 上午時段分組 (12/17)',
-        time: '09:30 - 12:30',
-        commonContext: '東京悠閒倒數時光，下午全員集合前往東京鐵塔與搭乘雙層觀光巴士。',
-        options: [
-          {
-            id: 'd7-am-optA',
-            letter: 'A',
-            name: '代官山蔦屋書店與精緻街區文青散策',
-            image: APP_IMAGES.villa,
-            summary: '在全日本最美森林書店代官山 T-SITE 漫步、翻閱生活雜誌、品嚐人氣手沖咖啡與選品店。',
-            suitability: '適合喜愛質感生活、建築設計、書香氛圍與優雅慢活的旅伴',
-            duration: '約 3 小時',
-            cost: '咖啡點心約 ¥1,000 / 人',
-            needBooking: false,
-            maxSlots: 12,
-            tags: ['森林書店', '代官山', '質感選物', '悠閒慢活']
-          },
-          {
-            id: 'd7-am-optB',
-            letter: 'B',
-            name: '澀谷十字路口與中目黑潮流咖啡探訪',
-            image: APP_IMAGES.shibuya,
-            summary: '探訪澀谷新潮地標宮下公園（MIYASHITA PARK）與中目黑目黑川沿岸精品選品店。',
-            suitability: '適合喜愛都會活力、拍照打卡與探索新地標的成員',
-            duration: '約 3 小時',
-            cost: '依個人消費',
-            needBooking: false,
-            maxSlots: 12,
-            tags: ['宮下公園', '中目黑', '流行前線', '咖啡巡禮']
+            tags: ['自然醒', '輕鬆休息']
           }
         ]
       }
     };
 
     const DEFAULT_ITINERARY = [
-      // Day 1 (12/11 五) - 依據最新包車與 Google Maps 路線
+      // ================= DAY 1｜12/11 (五) =================
       {
         id: 'it-1-1',
         day: 1,
         time: '12:30 - 13:15',
-        title: '抵達成田機場第二航廈 ➔ 入境通關 ＆ 專車接駁出發',
-        japaneseName: '成田空港第2ターミナル 到着・専用車出発',
+        title: '高雄 / 桃園出發 ➔ 抵達成田機場第二航廈',
+        japaneseName: '成田空港第2ターミナル 到着',
         type: '共同活動',
-        duration: '出關與接駁約 45 分鐘',
+        duration: '接駁準備',
         image: APP_IMAGES.fuji,
-        summary: '12:30 班機抵達成田機場第二航廈，出境預估 30～45 分鐘，預計 13:15 專車接駁準時出發。',
-        details: '乘車人數共 11 位（10大1小，已備兒童安全座椅/增高墊），行李預估 10～12 件大件行李，司機於出境大廳接機協助安放行李上車。',
-        location: '成田國際機場 第二航廈（Narita Airport T2）',
+        summary: '搭乘班機抵達東京成田機場，出關提領行李後與專車會合出發。',
+        details: '乘車人數共 11 位（10大1小，含兒童安全座椅/增高墊），預計 10～12 件大件行李。',
+        location: '成田國際機場 第二航廈',
         mapsUrl: 'https://maps.app.goo.gl/AFoQc5QpGCcieX189',
-        status: '已確認接駁',
-        tags: ['11位(10大1小)', '安全座椅', '10~12件行李']
+        status: '已確認',
+        tags: ['出發', '機場接駁']
       },
       {
         id: 'it-1-2',
         day: 1,
         time: '13:40 - 15:30',
-        title: '第 1 站：成田山表參道散策 ＆ 川豐鰻魚飯午餐',
-        japaneseName: '成田山表参道 ＆ 川豊うなぎ',
+        title: '川豐 鰻魚飯 ＆ 成田山 新勝寺',
+        japaneseName: '川豊 本店・成田山新勝寺',
         type: '共同活動',
-        duration: '停留 1 小時 50 分 (車程約 22 分)',
+        duration: '午餐＋散策',
         image: APP_IMAGES.villa,
-        summary: '下飛機先至機場旁江戶風情表參道漫步舒展筋骨，品嚐百年炭烤「川豐鰻魚飯」，悠閒停留至 15:30 不趕行程。',
-        details: '從機場出發僅約 22 分鐘車程。免趕夕陽，讓長輩與小朋友從容吃飽、散步參拜後，15:30 準時集合上車前往富士山。',
-        location: '千葉県成田市本町350-3（成田山表參道）',
-        mapsUrl: 'https://maps.google.com/?q=Kawatoyo+Narita',
-        status: '悠閒散策午餐',
-        tags: ['川豐鰻魚飯', '表參道老街', '不趕行程']
+        summary: '下飛機後先至成田山表參道享用百年炭烤川豐鰻魚飯，並參拜成田山新勝寺祈福散策。',
+        details: '參考攻略：https://mimigo.tw/naritasan/ 。表參道餐廳 Google Maps 可直接導航。',
+        location: '成田山表參道 / 川豐鰻魚飯',
+        mapsUrl: 'https://maps.app.goo.gl/dAA7NybNJW3wBwTN7',
+        blogUrl: 'https://mimigo.tw/naritasan/',
+        status: '已排定',
+        tags: ['午餐', '成田山']
       },
       {
         id: 'it-1-3',
         day: 1,
-        time: '15:30 - 17:30',
-        title: '專車前往富士山（高速公路舒適小憩）',
-        japaneseName: '富士山へ移動（東関東道・首都高・中央道）',
+        time: '17:30 - 18:15',
+        title: '談合坂服務區（下行）中途休息',
+        japaneseName: '談合坂サービスエリア（下り）',
         type: '共同活動',
-        duration: '車程約 2 小時 (行駛約 134 公里)',
-        image: APP_IMAGES.fuji,
-        summary: '吃飽上車後暖氣十足，行經東關東道、首都高與中央自動車道前往山梨，全家人可在車上補眠休息。',
-        details: '全程由專業包車司機平穩駕駛，免去轉車搬運行李辛勞。',
-        location: '中央自動車道（往河口湖方向）',
-        mapsUrl: 'https://maps.app.goo.gl/AFoQc5QpGCcieX189',
-        status: '專車直達',
-        tags: ['專車接送', '車上補眠']
+        duration: '休息 45 分',
+        image: APP_IMAGES.villa,
+        summary: '前往河口湖途中停靠中央道大型休息站，上洗手間、伸展筋骨與採買點心。',
+        details: '傍晚山區氣溫較低，下車時記得添上保暖外套。',
+        location: '中央自動車道 談合坂SA',
+        mapsUrl: 'https://maps.google.com/?q=Dangozaka+Service+Area',
+        status: '中途休息',
+        tags: ['休息站']
       },
       {
         id: 'it-1-4',
         day: 1,
-        time: '17:30 - 18:15',
-        title: '第 2 站：談合坂服務區（下行）中途休息補給',
-        japaneseName: '談合坂サービスエリア（下り）',
+        time: '18:50',
+        title: '抵達河口湖住宿：Fuji Kurasu 心（＆ 民宿附近覓食）',
+        japaneseName: 'Fuji Kurasu 心（こころ）',
         type: '共同活動',
-        duration: '停留 45 分鐘',
+        duration: '連住 4 晚',
         image: APP_IMAGES.villa,
-        summary: '停靠中央道大型休息站讓全家下車上洗手間、伸展筋骨，品嚐信玄餅霜淇淋與採買零食水果。',
-        details: '設有無障礙洗手間與寬敞休息區，天色漸暗後記得提醒家人添上厚外套保暖。',
-        location: '山梨県上野原市野田尻大野窪710',
-        mapsUrl: 'https://maps.google.com/?q=Dangozaka+Service+Area',
-        status: '中途休息站',
-        tags: ['無障礙休息站', '信玄餅霜淇淋', '補給採買']
-      },
-      {
-        id: 'it-1-5',
-        day: 1,
-        time: '18:50 - 21:30',
-        title: '第 3 站終點：抵達 Fuji Kurasu 心 入住 ＆ 溫馨晚餐',
-        japaneseName: '目的地：Fuji Kurasu 心（こころ）到着',
-        type: '共同活動',
-        duration: '整晚包棟放鬆 (車程約 35 分)',
-        image: APP_IMAGES.villa,
-        summary: '18:50 順利抵達河口湖包棟木屋！晚餐視當天時間與狀況，選擇民宿附近餐廳或順道超市採買回民宿自煮。',
-        details: '地址：山梨県南都留郡富士河口湖町船津997-8。廚房設備與鍋具齊全，泡完溫泉後全家圍坐客廳溫馨聚餐！',
+        summary: '抵達河口湖包棟住宿辦理入住，晚餐視當日時間與狀況至民宿附近餐廳或超市採買自煮。',
+        details: '連結已附「【PV】Fuji Kurasu 心」介紹影片與 Google Maps 導航。',
         location: '山梨県南都留郡富士河口湖町船津997-8',
-        mapsUrl: 'https://maps.google.com/?q=Fuji+Kurasu+Kokoro+Kawaguchiko',
-        status: '已付款包棟確認',
-        tags: ['包棟木屋', '餐廳或超市自煮', '家庭溫泉']
+        mapsUrl: 'https://maps.app.goo.gl/PuCeJn84Xhk7KSWa9',
+        status: '已確認住宿',
+        tags: ['包棟住宿', '晚餐']
       },
 
-      // Day 2 (12/12 六)
+      // ================= DAY 2｜12/12 (六) =================
       {
         id: 'it-2-1',
         day: 2,
-        time: '09:00 - 10:45',
-        title: '河口湖畔大石公園漫步 ＆ 景觀纜車',
-        japaneseName: '大石公園 ＆ 富士山パノラマロープウェイ',
+        time: '時間待定 (上午)',
+        title: '大石公園｜跟富士山說早安',
+        japaneseName: '大石公園',
         type: '共同活動',
-        duration: '停留 1.75 小時',
+        duration: '建議 45～60 分鐘',
         image: APP_IMAGES.fuji,
-        summary: '欣賞無遮蔽富士山與河口湖畔的開闊步道，湖畔生活館有富士山造型伴手禮與藍莓特產。',
-        details: '步道極為平整好走，適合推輪椅或嬰兒推車。冬季早晨空氣清澄，能看見絕美倒富士。',
-        location: '山梨県南都留郡富士河口湖町大石2585',
+        summary: '📷 這一站：散步、拍照、看富士山。',
+        details: '參考影片：【醉日本】東京近郊｜超完整富士山河口湖自助行景點全攻略（含交通甜點資訊）。',
+        location: '河口湖大石公園',
         mapsUrl: 'https://maps.google.com/?q=Oishi+Park+Kawaguchiko',
-        status: '免費入園',
-        tags: ['湖畔步道', '全家合影', '平緩好走']
+        videoTitle: '【醉日本】河口湖與大石公園攻略',
+        videoUrl: 'https://youtu.be/5EFflLbgl2c?si=1286KDebjlH7uJCG&t=861',
+        status: '詳細時間待編輯',
+        tags: ['上午', '看富士山']
       },
       {
         id: 'it-2-2',
         day: 2,
-        time: '11:00 - 13:00',
-        title: '午餐：Café Shizen × Fujisan Winery 早午餐',
+        time: '時間待定 (午餐)',
+        title: 'Café Shizen × Fujisan Winery',
         japaneseName: 'Café Shizen × 富士山ワイナリー',
         type: '共同活動',
-        duration: '用餐 2 小時',
+        duration: '午餐時段',
         image: APP_IMAGES.villa,
-        summary: '座落於森林中的知名景觀餐廳與酒莊，品嚐以山梨季節食材製作的精緻料理與自產葡萄酒。',
-        details: '已列入需預約清單（預計10月開放搶訂 11:00 時段）。甜點手作麵包與葡萄汁深受全家好評。',
-        location: '山梨県南都留郡富士河口湖町',
-        mapsUrl: 'https://maps.google.com/?q=Cafe+Shizen+Kawaguchiko',
-        status: '待10月預訂',
-        tags: ['人氣美食', '森林景觀', '美酒甜點']
+        summary: '森林景觀餐廳與酒莊享用早午餐。',
+        details: '待確認訂位時段後可直接編輯更新時間。',
+        location: 'Café Shizen',
+        mapsUrl: 'https://maps.app.goo.gl/ejUafs5EWFFT4RGr6',
+        status: '詳細時間待編輯',
+        tags: ['午餐']
       },
       {
         id: 'it-2-3',
         day: 2,
-        time: '13:30 - 16:30',
-        title: '【A/B 分組】雙人傘高空冒險 vs 牧場動物園散策',
-        japaneseName: '午後グループ行動',
+        time: '時間待定 (下午)',
+        title: 'A組｜朝霧富士山滑翔翼體驗',
+        japaneseName: '朝霧高原パラグライダー',
         type: '分組活動',
-        duration: '約 3 小時',
+        duration: '下午 A 組',
         image: APP_IMAGES.paragliding,
-        summary: '同一時段分成兩大精彩路線：青年參加雙人傘飛行，全家同行組前往馬飼野牧場動物園餵羊品嚐冰淇淋。',
-        details: '請至「分組登記」專區查看細節與登記成員名冊。各組由專車分段接駁或專人帶領。',
-        location: '朝霧高原 / 富士宮地區',
-        mapsUrl: 'https://maps.google.com/?q=Asagiri+Plateau',
-        status: '即時分組中',
-        tags: ['LINE輪播', '自由選擇', '互斥登記']
+        summary: 'Mt.Fuji 富士山滑翔翼體驗。',
+        details: '參考影片已連動於下方影片按鈕。',
+        location: '朝霧高原',
+        mapsUrl: 'https://maps.google.com/?q=Asagiri+Kogen+Paragliding',
+        videoTitle: 'Mt.Fuji 富士山滑翔翼體驗',
+        videoUrl: 'https://youtu.be/U4UiYKI_ElU?si=5RABetuRFMFIil6v&t=755',
+        status: '詳細時間待編輯',
+        tags: ['A組', '滑翔翼']
       },
       {
         id: 'it-2-4',
         day: 2,
-        time: '16:45 - 17:45',
-        title: '全體集合：音止・白絲瀑布（白糸の滝）',
-        japaneseName: '白糸の滝・音止の滝',
+        time: '時間待定 (下午)',
+        title: 'B組｜馬飼野牧場悠閒派',
+        japaneseName: 'まかいの牧場',
+        type: '分組活動',
+        duration: '下午 B 組',
+        image: APP_IMAGES.farm,
+        summary: '在富士山下遛羊、牧場散步與動物互動！',
+        details: '參考影片：馬飼野牧場攻略。',
+        location: '馬飼野牧場',
+        mapsUrl: 'https://maps.google.com/?q=Makaino+Farm',
+        videoTitle: '馬飼野牧場攻略',
+        videoUrl: 'https://youtu.be/ux0aTuttzB4?si=5i3DXT-IJG0ENb3_&t=61',
+        status: '詳細時間待編輯',
+        tags: ['B組', '牧場']
+      },
+      {
+        id: 'it-2-5',
+        day: 2,
+        time: '時間待定 (傍晚/晚餐)',
+        title: '田貫湖｜今天最後一眼富士山（＆ 民宿附近覓食）',
+        japaneseName: '田貫湖（見事な紅富士）',
         type: '共同活動',
-        duration: '停留 1 小時',
+        duration: '傍晚＋晚餐',
         image: APP_IMAGES.fuji,
-        summary: '日本國家指定名勝，富士山伏流水從數百道岩縫如白色絲絹傾瀉而下，負離子充沛。',
-        details: '步道修築良好，設有無障礙觀景台供大家遠眺瀑布全貌。',
-        location: '静岡県富士宮市上井出273-1',
-        mapsUrl: 'https://maps.google.com/?q=Shiraito+Falls+Fujinomiya',
-        status: '免費參觀',
-        tags: ['天然名勝', '負離子', '夕陽美景']
+        summary: '富士山絶景・田貫湖紅富士，結束後返回民宿附近覓食享用晚餐。',
+        details: '附田貫湖絕景參考影片。',
+        location: '田貫湖',
+        mapsUrl: 'https://maps.google.com/?q=Lake+Tanuki',
+        videoTitle: '富士山絶景・田貫湖の見事な紅富士',
+        videoUrl: 'https://youtu.be/hlWUu-9oqXI?si=ylsozmrMF3V70grh',
+        status: '詳細時間待編輯',
+        tags: ['田貫湖', '晚餐']
       },
 
-      // Day 3 (12/13 日)
+      // ================= DAY 3｜12/13 (日) =================
       {
         id: 'it-3-1',
         day: 3,
-        time: '09:30 - 10:30',
-        title: '🚗 前往租車公司取車（開啟富士山自駕之旅）',
-        japaneseName: 'レンタカー貸渡手続き・出発',
+        time: '時間待定 (上午)',
+        title: '租車（開啟兩天富士山自駕）',
+        japaneseName: 'レンタカー貸渡',
         type: '共同活動',
-        duration: '約 1 小時',
+        duration: '取車出發',
         image: APP_IMAGES.fuji,
-        summary: '散步前往租車公司，辦理取車手續，10:00 正式開啟兩天的富士山自駕之旅！',
-        details: '共租借三台自駕車（已確認雪胎配備），取車後檢查車況與兒童安全座椅安裝，準備出發前往分組活動。',
+        summary: '前往租車公司辦理取車手續，開啟兩天的河口湖與御殿場自駕行程。',
+        details: '共 3 台車（含雪胎與兒童座椅）。',
         location: '河口湖周邊租車公司',
-        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Station+Rent+a+Car',
-        status: '10:00 正式出發',
-        tags: ['三台自駕', '雪胎確認', '兩天租車']
+        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Station',
+        status: '詳細時間待編輯',
+        tags: ['租車']
       },
       {
         id: 'it-3-2',
         day: 3,
-        time: '11:00 - 14:00',
-        title: '🦁⛷️ 【A/B 分組】富士野生動物園 VS Snow Park YETI 滑雪',
-        japaneseName: '富士サファリパーク / スノーパークイエティ',
-        type: '分組活動',
-        duration: '約 3 小時',
-        image: APP_IMAGES.farm,
-        summary: 'A 組｜富士野生動物園 🦁（約 ¥3,200／人）：自駕近距離賞獅虎長頸鹿或搭 Jungle Bus；B 組｜Snow Park YETI ⛷️（約 ¥15,700／人含入場雪具雪衣）：富士山腳下滑雪初體驗！',
-        details: '兩組各自出發體驗，結束後陸續前往御殿場 Premium Outlets 會合。',
-        location: '裾野・富士山麓',
-        mapsUrl: 'https://maps.google.com/?q=Fuji+Safari+Park',
-        status: '分組登記中',
-        tags: ['富士野生動物園', 'Snow Park YETI', '自由分組']
+        time: '時間待定 (上午)',
+        title: '富士御殿場蒸溜所',
+        japaneseName: 'Kirin Fuji Gotemba Distillery',
+        type: '共同活動',
+        duration: '上午參觀',
+        image: APP_IMAGES.villa,
+        summary: '參觀 Kirin 富士御殿場威士忌蒸溜所。',
+        details: '導覽與品飲體驗，已附上地圖與介紹影片。',
+        location: '静岡県御殿場市柴怒田970',
+        mapsUrl: 'https://maps.app.goo.gl/tzkuuMtKNkVivj6W8',
+        videoTitle: '富士御殿場蒸溜所介紹',
+        videoUrl: 'https://www.youtube.com/watch?v=MT74N_C8ADY',
+        status: '詳細時間待編輯',
+        tags: ['蒸溜所']
       },
       {
         id: 'it-3-3',
         day: 3,
-        time: '14:00 - 19:00',
-        title: '🛍️ 御殿場 Premium Outlets 會合購物',
-        japaneseName: '御殿場プレミアム・アウトレット',
+        time: '時間待定 (上午)',
+        title: '富士野生動物園',
+        japaneseName: 'Fuji Safari Park',
         type: '共同活動',
-        duration: '營業至 19:00',
+        duration: '上午參觀',
+        image: APP_IMAGES.farm,
+        summary: '自駕進入富士野生動物園近距離看動物。',
+        details: '參考攻略：https://matcha-jp.com/tw/23196',
+        location: '富士野生動物園',
+        mapsUrl: 'https://maps.app.goo.gl/cYgemD1vrvSEsS1e6',
+        blogUrl: 'https://matcha-jp.com/tw/23196',
+        status: '詳細時間待編輯',
+        tags: ['動物園']
+      },
+      {
+        id: 'it-3-4',
+        day: 3,
+        time: '時間待定 (午/下午)',
+        title: 'A組逛街派｜御殿場 PREMIUM OUTLETS',
+        japaneseName: '御殿場プレミアム・アウトレット',
+        type: '分組活動',
+        duration: '下午 A 組',
         image: APP_IMAGES.fuji,
-        summary: '兩組依各自行程陸續前往 Outlet 會合，自由逛街、購物、吃美食！約 290 間店舖，還能欣賞富士山美景。',
-        details: '營業時間至 19:00，建議可於美食街或餐廳自行享用晚餐後駕車返回河口湖住宿休息。',
-        location: '静岡県御殿場市深沢1312',
+        summary: '御殿場 PREMIUM OUTLETS 自由逛街、購物與美食。',
+        details: '參考攻略：https://tisshuang.com/blog/post/premiumoutlet',
+        location: '御殿場 PREMIUM OUTLETS',
         mapsUrl: 'https://maps.google.com/?q=Gotemba+Premium+Outlets',
-        status: '營業至 19:00',
-        tags: ['290間店舖', '富士山美景', '自由購物美食']
+        blogUrl: 'https://tisshuang.com/blog/post/premiumoutlet',
+        status: '詳細時間待編輯',
+        tags: ['A組', 'Outlet']
+      },
+      {
+        id: 'it-3-5',
+        day: 3,
+        time: '時間待定 (午/下午)',
+        title: 'B組滑雪派｜Fujiyama Snow Resort Yeti',
+        japaneseName: 'スノーパークイエティ',
+        type: '分組活動',
+        duration: '下午 B 組',
+        image: APP_IMAGES.fuji,
+        summary: '富士山 Yeti 滑雪場體驗，含雪具租借與滑雪樂趣！',
+        details: '參考影片：場地收費及租借裝備攻略。',
+        location: 'Fujiyama Snow Resort Yeti',
+        mapsUrl: 'https://maps.google.com/?q=Snow+Park+Yeti',
+        videoTitle: '富士山 Yeti 滑雪場攻略',
+        videoUrl: 'https://youtu.be/g52Mz4DLGDk?si=D7jqPNCvqqDippS2',
+        status: '詳細時間待編輯',
+        tags: ['B組', '滑雪']
       },
 
-      // Day 4 (12/14 一)
+      // ================= DAY 4｜12/14 (一) =================
       {
         id: 'it-4-1',
         day: 4,
-        time: '04:00 - 07:30',
-        title: '🌠😴 【A/B 分組】A 組本栖湖追星日出 VS B 組睡到自然醒',
-        japaneseName: '本栖湖 星空・日の出 / 宿でゆっくり',
+        time: '時間待定 (清晨)',
+        title: 'A組｜追流星的尾巴，迎接富士山日出',
+        japaneseName: '本栖湖 星空・富士山日の出',
         type: '分組活動',
-        duration: '約 3.5 小時',
+        duration: '清晨 A 組',
         image: APP_IMAGES.fuji,
-        summary: 'A 組凌晨前往本栖湖追流星雨尾巴、等待富士山晨光；B 組留在住宿休息，養足精神再出發。',
-        details: '凌晨本栖湖氣溫較低，A 組出發請務必穿戴羽絨衣、毛帽與手套做好保暖。',
-        location: '本栖湖 / Fuji Kurasu 心',
+        summary: '環富士山晨光日出與流星雨尾巴觀賞！',
+        details: '參考影片：環富士山完整攻略（自駕看美景）。',
+        location: '本栖湖周邊',
         mapsUrl: 'https://maps.google.com/?q=Lake+Motosu',
-        status: '早晨自由選擇',
-        tags: ['流星雨尾巴', '富士山晨光', '自由分組']
+        videoTitle: '環富士山完整攻略',
+        videoUrl: 'https://youtu.be/LVvPWMdf9TE?si=OK5iniZ1suzO33KG&t=74',
+        status: '詳細時間待編輯',
+        tags: ['A組', '日出星空']
       },
       {
         id: 'it-4-2',
         day: 4,
-        time: '08:30 - 11:30',
-        title: '🏡 返回住宿・早餐・補眠',
-        japaneseName: '朝食・休憩・荷物整理',
-        type: '共同活動',
-        duration: '休息 3 小時',
+        time: '時間待定 (清晨)',
+        title: 'B組｜留在被窩裡，枕頭山繼續爬',
+        japaneseName: '宿でゆっくり',
+        type: '分組活動',
+        duration: '清晨 B 組',
         image: APP_IMAGES.villa,
-        summary: 'A 組回住宿補眠，B 組悠閒起床。大家整理行李與隨身用品，準備下午一起出發。',
-        details: '整理好隨身物品與相機裝備，充飽電準備下午的忍野八海與鑽石富士重頭戲。',
+        summary: '留在河口湖住宿睡到自然醒，養足精神準備出發！',
+        details: '起床後整理隨身物品等待會合。',
         location: 'Fuji Kurasu 心',
-        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Fuji+Kurasu',
-        status: '休息與集合',
-        tags: ['早餐補眠', '整理行李']
+        mapsUrl: 'https://maps.app.goo.gl/PuCeJn84Xhk7KSWa9',
+        status: '自由休息',
+        tags: ['B組', '睡到自然醒']
       },
       {
         id: 'it-4-3',
         day: 4,
-        time: '11:30 - 13:00',
-        title: '🍱 自由午餐・補充體力',
-        japaneseName: '自由昼食',
+        time: '時間待定 (上午)',
+        title: '河口湖一日遊（河口湖周圍景點）',
+        japaneseName: '河口湖周辺観光',
         type: '共同活動',
-        duration: '用餐 1.5 小時',
-        image: APP_IMAGES.villa,
-        summary: '建議在河口湖或前往忍野八海途中用餐，避免下午拍攝時肚子餓。',
-        details: '可依當日動線選擇河口湖或忍野周邊餐廳，吃飽後準時於 13:00 抵達忍野八海。',
-        location: '河口湖～忍野周邊',
-        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Restaurants',
-        status: '彈性用餐',
-        tags: ['午餐時間', '補充體力']
+        duration: '上午時段',
+        image: APP_IMAGES.fuji,
+        summary: '河口湖周圍景點彈性漫遊與午餐。',
+        details: '可依當天體力與天氣微調停留點。',
+        location: '河口湖周邊',
+        mapsUrl: 'https://maps.google.com/?q=Lake+Kawaguchi',
+        status: '詳細時間待編輯',
+        tags: ['河口湖']
       },
       {
         id: 'it-4-4',
         day: 4,
-        time: '13:00 - 14:10',
-        title: '⛩️ 忍野八海',
-        japaneseName: '忍野八海',
+        time: '時間待定 (下午)',
+        title: '山中湖 - 平野之濱（Hirano beach）',
+        japaneseName: '山中湖 平野の浜',
         type: '共同活動',
-        duration: '停留約 70 分鐘',
-        image: APP_IMAGES.fuji,
-        summary: '逛逛日式村落、欣賞清澈湧泉，吃吃特色小食、拍拍富士山與茅草屋。',
-        details: '園區步道平緩好走，可品嚐現烤草餅、豆腐與湧泉名水，14:10 準時上車前往山中湖。',
-        location: '山梨県南都留郡忍野村忍草',
-        mapsUrl: 'https://maps.google.com/?q=Oshino+Hakkai',
-        status: '免費參觀',
-        tags: ['清澈湧泉', '茅草屋', '富士山合影']
+        duration: '下午時段',
+        image: APP_IMAGES.farm,
+        summary: '山中湖平野之濱賞湖景與逆富士。',
+        details: '參考文章：https://boleroearth.blogspot.com/2025/04/4-3.html',
+        location: '山中湖 平野之濱',
+        mapsUrl: 'https://maps.app.goo.gl/5gNGn1D6ABV8fY3LA',
+        blogUrl: 'https://boleroearth.blogspot.com/2025/04/4-3.html',
+        status: '詳細時間待編輯',
+        tags: ['山中湖']
       },
       {
         id: 'it-4-5',
         day: 4,
-        time: '14:30 - 15:50',
-        title: '💎 山中湖花之都公園周邊（挑戰「鑽石富士」）',
-        japaneseName: '山中湖花の都公園周辺（ダイヤモンド富士）',
+        time: '時間待定 (下午)',
+        title: '忍野八海（Oshino hakkai）',
+        japaneseName: '忍野八海',
         type: '共同活動',
-        duration: '停留約 80 分鐘',
+        duration: '下午時段',
         image: APP_IMAGES.fuji,
-        summary: '冬季限定重頭戲！等待夕陽落向富士山頂，挑戰拍下「鑽石富士」！目標約 15:22 前後，實際時間與位置需依當日觀測條件確認。',
-        details: '15:50 準時集合啟程返回河口湖，以免延誤還車時間。',
-        location: '山梨県南都留郡山中湖村山中1650',
-        mapsUrl: 'https://maps.google.com/?q=Yamanakako+Hananomiyako+Park',
-        status: '冬季限定重頭戲',
-        tags: ['鑽石富士', '15:22前後', '夕陽美景']
+        summary: '欣賞清澈湧泉、日式茅草屋與吃特色小食。',
+        details: '參考攻略：https://www.wendyjourney.com/oshino-hakkai/',
+        location: '忍野八海',
+        mapsUrl: 'https://maps.app.goo.gl/aQGQgZB7FS3WmxNC8',
+        blogUrl: 'https://www.wendyjourney.com/oshino-hakkai/',
+        status: '詳細時間待編輯',
+        tags: ['忍野八海']
       },
       {
         id: 'it-4-6',
         day: 4,
-        time: '15:50 - 18:00',
-        title: '🚗 返回河口湖：加油、歸還三台租車',
-        japaneseName: '給油・レンタカー返却（3台）',
+        time: '時間待定 (下午)',
+        title: '日川時計店（人多可 PASS）',
+        japaneseName: '日川時計店',
         type: '共同活動',
-        duration: '預留 2 小時 10 分',
+        duration: '彈性停留',
         image: APP_IMAGES.fuji,
-        summary: '預留交通、加油與還車手續時間。長池親水公園不列為必去，避免延誤還車。',
-        details: '請於還車前將三台車加滿油並保留加油收據，辦理完還車手續後返回住宿休息。',
-        location: '河口湖租車公司',
-        mapsUrl: 'https://maps.google.com/?q=Kawaguchiko+Station',
-        status: '務必準時還車',
-        tags: ['加滿油', '歸還三台車', '預留緩衝']
+        summary: '富士吉田下吉田街景拍照（若人潮過多可彈性 PASS）。',
+        details: '參考攻略：https://permio1.com/shimoyoshida/',
+        location: '日川時計店',
+        mapsUrl: 'https://maps.app.goo.gl/V4P5DtT9yRfKm8y19',
+        blogUrl: 'https://permio1.com/shimoyoshida/',
+        status: '彈性停留',
+        tags: ['日川時計店']
+      },
+      {
+        id: 'it-4-7',
+        day: 4,
+        time: '時間待定 (備註)',
+        title: '富士山世界遺產中心（富士山三角錐 我要買!!!）',
+        japaneseName: 'Mt. Fuji World Heritage Centre',
+        type: '共同活動',
+        duration: '備註景點',
+        image: APP_IMAGES.fuji,
+        summary: '參觀倒立富士山建築，採買超人氣富士山三角錐紀念品！',
+        details: '參考攻略：https://jasonslife.tw/fuji-world-heritage-center/（請留意歸還三台租車時間）',
+        location: '富士山世界遺產中心',
+        mapsUrl: 'https://maps.app.goo.gl/jRNEDaKmJjWAw7HW7',
+        blogUrl: 'https://jasonslife.tw/fuji-world-heritage-center/',
+        status: '詳細時間待編輯',
+        tags: ['世界遺產中心', '伴手禮']
       },
 
-      // Day 5 (12/15 二)
+      // ================= DAY 5｜12/15 (二) =================
       {
         id: 'it-5-1',
         day: 5,
-        time: '10:30 - 12:30',
-        title: 'Fuji Kurasu 心 退房 ➔ 高尾山能量景點（搭纜車賞楓）',
-        japaneseName: '高尾山（たかおさん）ケーブルカー',
+        time: '10:30',
+        title: '預計 10:30 退房（Fuji Kurasu 心）',
+        japaneseName: 'Fuji Kurasu 心 チェックアウト',
         type: '共同活動',
-        duration: '停留 2 小時',
-        image: APP_IMAGES.fuji,
-        summary: '收拾行李專車出發前往東京，中途造訪米其林三星景點高尾山，搭乘傾斜度日本第一的景觀纜車。',
-        details: '山頂可遠眺東京全景與富士山，薬王院祈福能量滿滿。若不想走太多路可在纜車站周邊茶屋喝茶吃烤糰子。',
-        location: '東京都八王子市高尾町',
-        mapsUrl: 'https://maps.google.com/?q=Mount+Takao+Cable+Car',
-        status: '纜車現場購票',
-        tags: ['米其林三星', '景觀纜車', '能量景點']
+        duration: '退房出發',
+        image: APP_IMAGES.villa,
+        summary: '整理行李並預計於 10:30 退房，告別河口湖前往東京。',
+        details: '退房前確認隨身物品與護照證件。',
+        location: 'Fuji Kurasu 心',
+        mapsUrl: 'https://maps.app.goo.gl/PuCeJn84Xhk7KSWa9',
+        status: '已確認',
+        tags: ['退房']
       },
       {
         id: 'it-5-2',
         day: 5,
-        time: '13:00 - 14:00',
-        title: '午餐：高尾山名物高橋家山藥蕎麥麵（とろろそば）',
-        japaneseName: '高橋家 とろろ蕎麥',
+        time: '15:00',
+        title: '抵達東京住宿：美滿如家 池袋（Check-in）',
+        japaneseName: 'MIMARU東京 池袋 チェックイン',
         type: '共同活動',
-        duration: '用餐 1 小時',
-        image: APP_IMAGES.villa,
-        summary: '擁有 180 年歷史的老舖，店內有一棵巨大柿子樹，品嚐濃郁滑順的山藥泥手打蕎麥麵。',
-        details: '口感溫潤滑順，長輩非常喜歡，補充爬山後的元氣。',
-        location: '東京都八王子市高尾町2209',
-        mapsUrl: 'https://maps.google.com/?q=Takahashiya+Takao',
-        status: '現場候位',
-        tags: ['百年老舖', '養生山藥', '經典美味']
+        duration: '入住 3 晚',
+        image: APP_IMAGES.shibuya,
+        summary: '15:00 抵達美滿如家 池袋辦理 Check-in 放置行李。',
+        details: '連住 3 晚（12/15–12/18）。',
+        location: '美滿如家 池袋 (MIMARU TOKYO IKEBUKURO)',
+        mapsUrl: 'https://maps.google.com/?q=MIMARU+TOKYO+IKEBUKURO',
+        status: '已確認',
+        tags: ['美滿如家池袋']
       },
       {
         id: 'it-5-3',
         day: 5,
-        time: '15:00 - 16:00',
-        title: '抵達「美滿如家 池袋」Check-in 放置行李',
-        japaneseName: 'MIMARU東京 池袋 チェックイン',
+        time: '15:00',
+        title: 'SHIBUYA SKY（澀谷展望台）',
+        japaneseName: 'Shibuya Sky',
         type: '共同活動',
-        duration: '辦理入住 1 小時',
+        duration: '展望台體驗',
         image: APP_IMAGES.shibuya,
-        summary: '專車直達美滿如家 池袋（MIMARU TOKYO IKEBUKURO），協助大家辦理入住並放好行李，稍作休息準備迎接東京夜景。',
-        details: '公寓式家庭飯店，房內配備寬敞客廳與簡易廚房，適合家族連住 3 晚（12/15–12/18）。',
-        location: '美滿如家 池袋 (MIMARU TOKYO IKEBUKURO)',
-        mapsUrl: 'https://maps.google.com/?q=MIMARU+TOKYO+IKEBUKURO',
-        status: '已確認入住',
-        tags: ['美滿如家池袋', 'MIMARU', '東京連住3晚']
-      },
-      {
-        id: 'it-5-4',
-        day: 5,
-        time: '16:30 - 18:00',
-        title: 'SHIBUYA SKY 展望台（鎖定日落富士百萬夜景）',
-        japaneseName: '渋谷スカイ（SHIBUYA SKY）',
-        type: '共同活動',
-        duration: '停留 1.5 小時',
-        image: APP_IMAGES.shibuya,
-        summary: '站上澀谷最高 229 公尺頂樓露天停機坪，360 度俯瞰東京繁華街景、東京鐵塔與夕陽餘暉富士山！',
-        details: '重要搶票行程！預計 12/1 00:00 準時搶購 12/15 16:30 黃金日落場次。設有透明無障礙電梯直達。',
-        location: '東京都渋谷区渋谷2-24-12 渋谷スクランブルスクエア',
-        mapsUrl: 'https://maps.google.com/?q=SHIBUYA+SKY',
-        status: '待12/1搶票',
-        tags: ['極致地標', '日落夕陽', '360度百萬夜景']
-      },
-      {
-        id: 'it-5-5',
-        day: 5,
-        time: '18:30 - 20:30',
-        title: '晚餐：涮涮鍋 塚田（高空景觀和牛鍋物）',
-        japaneseName: 'しゃぶしゃぶ つかだ 渋谷スクランブルスクエア店',
-        type: '共同活動',
-        duration: '用餐 2 小時',
-        image: APP_IMAGES.shibuya,
-        summary: '看完夜景直接搭電梯下樓吃鍋！品嚐鹿兒島黑毛和牛、黑豚與產地直送新鮮野菜，一人一鍋乾淨衛生。',
-        details: '免去移動奔波，全家可繼續在窗邊欣賞澀谷繁華夜景，口味清爽健康。',
-        location: '渋谷スクランブルスクエア 12F',
-        mapsUrl: 'https://maps.google.com/?q=Shabu-shabu+Tsukada+Shibuya',
-        status: '排定10月訂位',
-        tags: ['一人一鍋', '黑毛和牛', '高空夜景']
-      },
-      {
-        id: 'it-5-6',
-        day: 5,
-        time: '21:00 - 22:30',
-        title: '星巴克臻選®東京烘焙工坊夜景散策（自由參加）',
-        japaneseName: 'Starbucks Reserve® Roastery Tokyo',
-        type: '自由活動',
-        duration: '停留 1.5 小時',
-        image: APP_IMAGES.shibuya,
-        summary: '隈研吾操刀設計的全球頂級四層樓旗艦店，目黑川畔夜景，品嚐限定手沖咖啡、義大利披薩與調酒。',
-        details: '自由參加行程，長輩可選擇提早回飯店休息，年輕成員可散步朝聖拍照。',
-        location: '東京都目黒区青葉台2-19-23',
-        mapsUrl: 'https://maps.google.com/?q=Starbucks+Reserve+Roastery+Tokyo',
-        status: '自由前往',
-        tags: ['隈研吾建築', '全球旗艦', '夜間散策']
+        summary: '登上澀谷高空展望台欣賞東京市景與日落夜景。',
+        details: '已附上地圖與 Shorts 參考影片（時間可再依實際搶票場次微調）。',
+        location: 'Shibuya Sky',
+        mapsUrl: 'https://maps.app.goo.gl/SrnksRPUASHxwZdu8',
+        videoTitle: 'Shibuya Sky 實景短片',
+        videoUrl: 'https://youtube.com/shorts/L3gfaJLG4WQ?si=-P7b2mwXXRlKVwmz',
+        status: '待確認門票場次',
+        tags: ['SHIBUYA SKY']
       },
 
-      // Day 6 (12/16 三)
+      // ================= DAY 6｜12/16 (三) =================
       {
         id: 'it-6-1',
         day: 6,
-        time: '09:00 - 10:15',
-        title: '駒込・妙義神社參拜（貓咪黎明御守）',
-        japaneseName: '駒込妙義神社（みょうぎじんじゃ）',
+        time: '時間待定 (上午)',
+        title: '妙義神社（貓咪黎明御守）',
+        japaneseName: 'Komagome Myogi Shrine',
         type: '共同活動',
-        duration: '停留 1.25 小時',
+        duration: '上午參拜',
         image: APP_IMAGES.villa,
-        summary: '擁有 1300 年歷史的能量古神社，以超人氣「貓咪黎明御守（勝守）」聞名，祈求全家平安順遂。',
-        details: '神社寧靜祥和，階梯旁設有扶手，是深度旅行者的私房名所。',
-        location: '東京都豊島区駒込3-16-16',
-        mapsUrl: 'https://maps.google.com/?q=Komagome+Myogi+Shrine',
-        status: '免費參拜',
-        tags: ['貓咪御守', '能量神社', '祈求平安']
+        summary: '參拜駒込妙義神社，收藏超人氣貓咪黎明御守。',
+        details: '參考分享：https://www.facebook.com/share/r/1HuRsmDLJL/',
+        location: '駒込妙義神社',
+        mapsUrl: 'https://maps.app.goo.gl/uMYbKwbJArq1Urzq5',
+        blogUrl: 'https://www.facebook.com/share/r/1HuRsmDLJL/',
+        status: '詳細時間待編輯',
+        tags: ['妙義神社', '御守']
       },
       {
         id: 'it-6-2',
         day: 6,
-        time: '10:30 - 12:30',
-        title: '【A/B 分組】六義園和風老街 vs 原宿竹下通潮流選品',
-        japaneseName: '午前グループ行動',
-        type: '分組活動',
-        duration: '約 2 小時',
+        time: '時間待定 (上午)',
+        title: '六義園（Rikugien Gardens）',
+        japaneseName: '六義園',
+        type: '共同活動',
+        duration: '上午散策',
         image: APP_IMAGES.villa,
-        summary: '方案 A 漫步江戶回遊式大名庭園六義園與巢鴨拔刺地藏尊老街；方案 B 前往原宿竹下通挑選年輕潮流衣飾配件。',
-        details: '中午約定於表參道會合享用精緻午餐。',
-        location: '六義園 / 原宿',
-        mapsUrl: 'https://maps.google.com/?q=Rikugien+Gardens',
-        status: '分組登記中',
-        tags: ['江戶庭園', '老街大福', '原宿選品']
+        summary: '漫步江戶回遊式日式庭園。',
+        details: '參考攻略：https://matcha-jp.com/tw/4500',
+        location: '六義園',
+        mapsUrl: 'https://maps.app.goo.gl/cpWPCH9XEcah9UZ28',
+        blogUrl: 'https://matcha-jp.com/tw/4500',
+        status: '詳細時間待編輯',
+        tags: ['六義園']
       },
       {
         id: 'it-6-3',
         day: 6,
-        time: '13:00 - 15:30',
-        title: '表參道優雅逛街 ＆ 媽媽專屬：POLÈNE 東京旗艦店看包',
-        japaneseName: '表参道散策 ＆ Polène Tokyo',
+        time: '時間待定 (上午)',
+        title: '巢鴨地藏通商店街（可以調整成竹下通）',
+        japaneseName: 'Sugamo Jizodori Shopping Street',
         type: '共同活動',
-        duration: '約 2.5 小時',
-        image: APP_IMAGES.shibuya,
-        summary: '漫步綠樹成蔭的表參道林蔭大道，造訪法國精緻皮革品牌 POLÈNE 亞洲旗艦店（媽媽指名看包！）。',
-        details: '店內空間如同當代藝術館，皮質細膩版型典雅。周邊眾多露天咖啡廳方便坐下品嚐甜點。',
-        location: '東京都港区南青山5-1-7',
-        mapsUrl: 'https://maps.google.com/?q=Polene+Tokyo',
-        status: '自由逛街',
-        tags: ['POLÈNE東京店', '林蔭大道', '媽媽心願清單']
+        duration: '上午逛街',
+        image: APP_IMAGES.villa,
+        summary: '巢鴨地藏通老街散策（可視當天情況調整成原宿竹下通）。',
+        details: '下町美食與老街逛街體驗。',
+        location: '巢鴨地藏通商店街',
+        mapsUrl: 'https://maps.app.goo.gl/RKCXXrkYXbmhSXNi8',
+        status: '彈性調整',
+        tags: ['巢鴨老街']
       },
       {
         id: 'it-6-4',
         day: 6,
-        time: '16:00 - 17:30',
-        title: '惠比壽啤酒紀念館（Yebisu Brewery Tokyo）品飲',
-        japaneseName: 'ヱビスビール記念館',
+        time: '時間待定 (下午)',
+        title: '表參道逛街（媽媽要看包 POLÈNE 東京店）',
+        japaneseName: 'Polène - Tokyo',
         type: '共同活動',
-        duration: '停留 1.5 小時',
+        duration: '下午逛街',
         image: APP_IMAGES.shibuya,
-        summary: '重新開幕的惠比壽啤酒發源地！重現百年啤酒工坊，品嚐剛出爐生啤酒與無酒精麥芽飲品。',
-        details: '展館設計精緻現代，無障礙設施完善，戶外花園廣場聖誕燈飾浪漫。',
-        location: '東京都渋谷区恵比寿4-20-1 恵比寿ガーデンプレイス内',
-        mapsUrl: 'https://maps.google.com/?q=Yebisu+Brewery+Tokyo',
-        status: '免費入場/試飲付費',
-        tags: ['啤酒文化', '惠比壽花園', '微醺時光']
-      },
-      {
-        id: 'it-6-5',
-        day: 6,
-        time: '18:30 - 20:45',
-        title: '晚餐：蕃 YORONIKU 惠比壽（東京最高峰和牛燒肉盛宴）',
-        japaneseName: 'よろにく 蕃（EBISU YORONIKU）',
-        type: '共同活動',
-        duration: '用餐 2.25 小時',
-        image: APP_IMAGES.shibuya,
-        summary: '全日本燒肉界天花板！專業侍肉師桌邊一對一精心代烤，絲綢肉片、夏多布里昂與松露和牛飯，入口即化。',
-        details: '全家專屬頂級美味慶祝之夜！預計 11 月開放搶訂 18:30 時段獨立包廂。',
-        location: '東京都渋谷区恵比寿1-11-5 GEMS恵比寿 8F',
-        mapsUrl: 'https://maps.google.com/?q=Yoroniku+Ebisu',
-        status: '排定11月訂位',
-        tags: ['和牛天花板', '桌邊代烤', '家族慶祝之夜']
+        summary: '表參道林蔭大道逛街，帶媽媽前往 POLÈNE 東京旗艦店挑包包！',
+        details: 'Google Maps 已直接設定為 POLÈNE 東京店。',
+        location: 'Polène - Tokyo (表參道)',
+        mapsUrl: 'https://maps.app.goo.gl/TS3TuULKjxc6ZzBf7',
+        status: '詳細時間待編輯',
+        tags: ['表參道', 'POLÈNE']
       },
 
-      // Day 7 (12/17 四)
+      // ================= DAY 7｜12/17 (四) =================
       {
         id: 'it-7-1',
         day: 7,
-        time: '09:30 - 12:30',
-        title: '【A/B 分組】代官山蔦屋書店散策 vs 澀谷中目黑文創選物',
-        japaneseName: '午前グループ行動',
-        type: '分組活動',
-        duration: '約 3 小時',
-        image: APP_IMAGES.villa,
-        summary: '方案 A 悠閒漫步代官山 T-SITE 森林書店與日式精緻雜貨；方案 B 探訪澀谷宮下公園與中目黑潮流咖啡。',
-        details: '兩路線相鄰，步行或一站地鐵即可輕鬆互通。',
-        location: '代官山 / 澀谷',
-        mapsUrl: 'https://maps.google.com/?q=Daikanyama+T-Site',
-        status: '分組登記中',
-        tags: ['蔦屋書店', '森林街區', '文青漫活']
+        time: '時間待定 (下午)',
+        title: '惠比壽啤酒紀念館（啤酒喝起來）',
+        japaneseName: 'Yebisu Brewery Tokyo',
+        type: '共同活動',
+        duration: '下午體驗',
+        image: APP_IMAGES.shibuya,
+        summary: '前往惠比壽啤酒紀念館（Yebisu Brewery Tokyo）品嚐新鮮啤酒！',
+        details: '逛完花園廣場後傍晚準備搭觀光巴士或前往晚餐。',
+        location: 'Yebisu Brewery Tokyo',
+        mapsUrl: 'https://maps.app.goo.gl/97Pr6ubMD9uL72AS7',
+        status: '詳細時間待編輯',
+        tags: ['惠比壽', '啤酒']
       },
       {
         id: 'it-7-2',
         day: 7,
-        time: '13:00 - 14:15',
-        title: '午餐：經典洋食漢堡排或東京名物豚骨拉麵',
-        japaneseName: '東京洋食 昼食',
+        time: '時間待定 (備註/傍晚)',
+        title: '東京觀光巴士（落日飛車）',
+        japaneseName: 'スカイバス東京',
         type: '共同活動',
-        duration: '用餐 1.25 小時',
+        duration: '傍晚觀光',
         image: APP_IMAGES.shibuya,
-        summary: '品嚐香濃多汁的手工炭烤漢堡排或熱呼呼東京拉麵，補充下午觀光體力。',
-        details: '配合下午觀光巴士集合時間，選在丸之內周邊舒適餐廳用餐。',
-        location: '東京車站周邊',
-        mapsUrl: 'https://maps.google.com/?q=Tokyo+Station+Food',
-        status: '現場安排',
-        tags: ['東京美食', '家庭聚餐']
+        summary: '搭乘東京雙層露天觀光巴士，飽覽市區日落與夜景！',
+        details: '已附上 Instagram Reel 參考影片。',
+        location: '東京車站 / 丸之內乘車處',
+        mapsUrl: 'https://maps.google.com/?q=Sky+Bus+Tokyo+Marunouchi',
+        videoTitle: '東京觀光巴士（落日飛車）IG 影片',
+        videoUrl: 'https://www.instagram.com/reel/DSSDxS7kbaM/?igsh=M3NvNWl4bm40cDdl',
+        status: '詳細時間待編輯',
+        tags: ['觀光巴士', 'IG影片']
       },
       {
         id: 'it-7-3',
         day: 7,
-        time: '14:45 - 16:15',
-        title: '東京鐵塔經典巡禮 ➔ 前往東京車站丸之內',
-        japaneseName: '東京タワー ＆ 東京駅丸の内駅舎',
+        time: '時間待定 (晚餐)',
+        title: '蕃 YORONIKU（燒肉吃起來）',
+        japaneseName: 'Yoroniku Ebisu',
         type: '共同活動',
-        duration: '停留 1.5 小時',
+        duration: '晚餐饗宴',
         image: APP_IMAGES.shibuya,
-        summary: '紅白相間的東京永恆地標東京鐵塔，在芝公園綠地留下全家溫馨大合照，隨後漫步至紅磚百年東京車站。',
-        details: '平緩好走，步道無障礙，是東京最經典的打卡地標。',
-        location: '東京都港区芝公園 / 千代田区丸の内',
-        mapsUrl: 'https://maps.google.com/?q=Tokyo+Tower',
-        status: '經典合影',
-        tags: ['東京鐵塔', '百年紅磚車站', '經典地標']
-      },
-      {
-        id: 'it-7-4',
-        day: 7,
-        time: '16:30 - 17:45',
-        title: '東京雙層露天觀光巴士（落日飛車！全景巡遊東京夜景）',
-        japaneseName: 'スカイバス東京（SKY BUS TOKYO）',
-        type: '共同活動',
-        duration: '乘車體驗 1.25 小時',
-        image: APP_IMAGES.shibuya,
-        summary: '無車頂雙層紅色巴士！在 16:30 黃金夕陽落日時分疾馳穿過彩虹大橋、銀座、東京鐵塔下方，全視角飽覽璀璨都會夜景！',
-        details: '免走路即可無死角吹風看夜景，長輩與幼童大受好評。預計 11/16 搶票（每人約 ¥1,900）。車上提供中文語音導覽。',
-        location: '丸の内 丸ビル前 巴士乘車處',
-        mapsUrl: 'https://maps.google.com/?q=Sky+Bus+Tokyo+Marunouchi',
-        status: '待11/16搶票',
-        tags: ['落日飛車', '露天雙層巴士', '全景夜景']
-      },
-      {
-        id: 'it-7-5',
-        day: 7,
-        time: '18:15 - 20:30',
-        title: '晚餐：丸之內日式居酒屋慶祝晚宴',
-        japaneseName: '丸の内 和食居酒屋 歓談',
-        type: '共同活動',
-        duration: '用餐 2 小時',
-        image: APP_IMAGES.shibuya,
-        summary: '在東京車站旁的精緻和食居酒屋，全家圍坐舉杯慶祝 8 天美好回憶，享用現烤牛舌與當令刺身。',
-        details: '悠閒步調，酒足飯飽後散步回飯店收拾行李。',
-        location: '東京丸之內地區',
-        mapsUrl: 'https://maps.google.com/?q=Tokyo+Station+Marunouchi+Dining',
-        status: '已排定',
-        tags: ['回顧歡聚', '和風晚宴', '溫馨圓滿']
+        summary: '惠比壽頂級和牛燒肉名店「蕃 YORONIKU」大啖美味燒肉！',
+        details: '參考食記：https://tisshuang.com/blog/post/ebisu-yoroniku',
+        location: '蕃 YORONIKU 惠比壽',
+        mapsUrl: 'https://maps.app.goo.gl/9a9jkaCfKuLurL7h6',
+        blogUrl: 'https://tisshuang.com/blog/post/ebisu-yoroniku',
+        status: '詳細時間待編輯',
+        tags: ['晚餐', 'YORONIKU']
       },
 
-      // Day 8 (12/18 五)
+      // ================= DAY 8｜12/18 (五) =================
       {
         id: 'it-8-1',
         day: 8,
-        time: '09:30 - 11:30',
-        title: '成田山新勝寺參拜 ＆ 懷舊表參道老街巡禮',
-        japaneseName: '成田山新勝寺（なりたさん しんしょうじ）',
+        time: '15:00',
+        title: '預計三點到機場（辦理退稅需求）',
+        japaneseName: '成田空港へ移動・免税手続き',
         type: '共同活動',
-        duration: '停留 2 小時',
+        duration: '機場退稅與報到',
         image: APP_IMAGES.fuji,
-        summary: '擁有千年以上歷史的關東名剎，祈求全家健康平安。800公尺長的江戶風情表參道充滿米餅店與工藝品老店。',
-        details: '專車載著全部行李直達，不必提行李。長輩可在仁王門與大本堂前投幣祈福、摸幸運龜。',
-        location: '千葉県成田市成田1',
-        mapsUrl: 'https://maps.google.com/?q=Naritasan+Shinsho-ji',
-        status: '免費參拜',
-        tags: ['千年古剎', '江戶老街', '祈福納福']
-      },
-      {
-        id: 'it-8-2',
-        day: 8,
-        time: '11:45 - 13:30',
-        title: '午餐：川豐 鰻魚飯成田本店（百年炭烤現宰鰻魚名店）',
-        japaneseName: '川豊 本店（かわとよ）うなぎ',
-        type: '共同活動',
-        duration: '用餐 1.75 小時',
-        image: APP_IMAGES.villa,
-        summary: '創業於 1910 年的關東第一鰻魚名店！師傅在店門口俐落剖鰻、炭火慢烤，淋上傳承百年的濃醇蒲燒醬汁，肉質細嫩飄香。',
-        details: '全家旅行最完美的壓軸午餐！木造二層古雅老屋用餐，口味深受長輩與全家人喜愛。',
-        location: '千葉県成田市仲町386',
-        mapsUrl: 'https://maps.google.com/?q=Kawatoyo+Narita',
-        status: '百年名店',
-        tags: ['百年炭烤鰻魚', '關東第一', '壓軸美食']
-      },
-      {
-        id: 'it-8-3',
-        day: 8,
-        time: '14:30 - 18:30',
-        title: '專車抵達成田機場 ➔ 辦理退稅免稅採購 ➔ 搭機平安返家',
-        japaneseName: '成田国際空港へ移動 ＆ 帰国便',
-        type: '共同活動',
-        duration: '辦理手續與登機',
-        image: APP_IMAGES.fuji,
-        summary: '專車於 14:30~15:00 順利抵達成田機場，輕鬆辦理行李托運與退稅，採購日本限定零食伴手禮，搭機平安賦歸！',
-        details: '預留 3 小時充裕時間，長輩在出境免稅區慢慢逛、坐著候機喝茶。機上享用熱騰騰晚餐，感謝全家共同寫下無比難忘的 2026 冬之回憶！',
-        location: '成田國際機場 第一/第二航廈',
+        summary: '預計 15:00 抵達機場辦理行李托運與退稅手續，免稅店採買伴手禮。',
+        details: '晚餐為機上飛機餐，結束愉快的 8 天東京富士山家族旅行！',
+        location: '成田國際機場',
         mapsUrl: 'https://maps.google.com/?q=Narita+International+Airport',
-        status: '航班已確認',
-        tags: ['專車送機', '退稅免稅採購', '溫馨平安返台']
+        status: '已確認',
+        tags: ['機場退稅', '返台']
       }
     ];
 
-    const DEFAULT_ATTRACTIONS = [
+        const DEFAULT_ATTRACTIONS = [
       {
         id: 'att-1',
         name: '大石公園（Oishi Park）',
@@ -2485,9 +2389,9 @@
       }
     }
 
-    if (!localStorage.getItem('tokyo_fuji_travel_migrated_20261117')) {
+    if (!localStorage.getItem('tokyo_fuji_travel_migrated_20261123')) {
       ['attractions', 'groupSlots', 'itinerary', 'userChoices'].forEach(k => localStorage.removeItem('tokyo_fuji_travel_' + k));
-      localStorage.setItem('tokyo_fuji_travel_migrated_20261117', '1');
+      localStorage.setItem('tokyo_fuji_travel_migrated_20261123', '1');
     }
 
     const state = {
@@ -2744,17 +2648,27 @@
       const items = state.itinerary.filter(i => i.day === state.activeDay && (activeItineraryGroupFilter === 'all' || i.type !== '分組活動' || i.title.includes(activeItineraryGroupFilter + '組') || i.summary.includes(activeItineraryGroupFilter + ' 組') || i.summary.includes(activeItineraryGroupFilter + '組')));
       document.getElementById('itineraryItemCount').textContent = `DAY ${state.activeDay} 共 ${items.length} 個活動`;
 
+      const gTimeBig = document.getElementById('gatheringTimeBig');
       const gBadge = document.getElementById('gatheringDayBadge');
+      const gTitle = document.getElementById('gatheringTitleText');
       const gText = document.getElementById('dailyGatheringText');
+      const gMaps = document.getElementById('gatheringMapsBtn');
       if (gBadge) gBadge.textContent = `Day ${state.activeDay}`;
-      if (gText) {
-        if (items.length > 0) {
-          const first = items[0];
-          const startT = (first.time || '').split(' - ')[0] || first.time;
-          gText.textContent = `首發時間 ${startT} ｜ ${first.title}${first.location ? '（集合：' + first.location + '）' : ''}`;
-        } else {
-          gText.textContent = '本日暫無集合行程安排';
+      if (items.length > 0) {
+        const first = items[0];
+        const startT = (first.time || '').split(' - ')[0] || first.time || '時間待定';
+        if (gTimeBig) gTimeBig.textContent = startT;
+        if (gTitle) gTitle.textContent = first.title;
+        if (gText) gText.textContent = `${first.location ? first.location + '｜' : ''}${first.summary || ''}`;
+        if (gMaps) {
+          gMaps.href = first.mapsUrl || '#';
+          gMaps.classList.toggle('hidden', !first.mapsUrl);
         }
+      } else {
+        if (gTimeBig) gTimeBig.textContent = '--:--';
+        if (gTitle) gTitle.textContent = '本日暫無集合行程';
+        if (gText) gText.textContent = '請切換其他日期或由管理者新增行程';
+        if (gMaps) gMaps.classList.add('hidden');
       }
 
       // Render Visual Route Map if in Map mode or top preview
@@ -2775,158 +2689,147 @@
         const cardMapsUrl = item.mapsUrl || (linkedAtt ? linkedAtt.mapsUrl : '');
         const cardVideoUrl = (item.videoUrl && item.videoUrl.trim()) ? item.videoUrl : (linkedAtt ? (linkedAtt.videoUrl || '') : '');
         const cardVideoTitle = (item.videoTitle && item.videoTitle.trim()) ? item.videoTitle : (linkedAtt ? (linkedAtt.videoTitle || linkedAtt.name) : item.title);
+
+        const timeParts = (item.time || '').split(' - ');
+        const startTime = timeParts[0] || item.time || '時間待定';
+        const endTime = timeParts[1] ? ` - ${timeParts[1]}` : '';
+
+        // Subtle left-right stagger along the winding road on wider screens
+        const staggerClass = index % 2 === 1 ? 'sm:ml-10' : 'sm:mr-10';
+
         const card = document.createElement('div');
         card.id = `timelineCard-${item.id}`;
-        card.className = `flex items-start space-x-2.5 sm:space-x-3.5 relative transition duration-200 group`;
-
-        // Parse time: "07:30 - 12:30" -> startTime: "07:30", endTime: "12:30"
-        const timeParts = item.time.split(' - ');
-        const startTime = timeParts[0] || item.time;
-        const endTime = timeParts[1] || '';
-
-        // Timeline Node Dot & Colors
-        const dotBg = isSplit ? 'bg-[#6BA8CF] ring-[#B9E0F5]' : 'bg-[#17628F] ring-[#E4F3FC]';
-        const isLast = index === items.length - 1;
+        card.className = `relative transition duration-200 ${staggerClass}`;
 
         card.innerHTML = `
-          <!-- LEFT PROMINENT TIME COLUMN -->
-          <div class="w-16 sm:w-20 shrink-0 text-right pt-2 select-none">
-            <div class="text-base sm:text-lg font-black text-slate-900 tracking-tight font-sans leading-none">
-              ${startTime}
-            </div>
-            ${endTime ? `
-              <div class="text-[11px] font-semibold text-slate-400 mt-1 tracking-tight">
-                ~ ${endTime}
-              </div>
-            ` : ''}
-            <div class="mt-1.5">
-              <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                isSplit ? 'bg-warm-50 text-warm-700 border border-warm-200' : 'bg-fuji-50 text-fuji-700 border border-fuji-100'
-              }">
-                ${item.duration.replace('停留 ', '').replace('約 ', '').replace('用餐 ', '')}
-              </span>
-            </div>
+          <!-- Floating Time Pill Above Card -->
+          <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white border border-[#B9E0F5] shadow-xs text-xs font-extrabold text-[#17628F] mb-2">
+            <svg class="w-3.5 h-3.5 text-[#17628F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>${startTime}${endTime}</span>
+            ${item.duration ? `<span class="text-[10px] font-semibold text-slate-400">・${item.duration}</span>` : ''}
           </div>
 
-          <!-- CENTER TIMELINE AXIS & NODE -->
-          <div class="relative flex flex-col items-center shrink-0 self-stretch pt-2.5">
-            <div class="w-6 h-6 rounded-full ${dotBg} ring-4 ring-white shadow-xs flex items-center justify-center text-white text-[10px] font-black z-10 transition transform group-hover:scale-110">
-              ${index + 1}
-            </div>
-            ${!isLast ? `
-              <div class="w-0.5 bg-slate-200 grow mt-1 mb-1"></div>
-            ` : ''}
-          </div>
-
-          <!-- RIGHT ACTIVITY CARD -->
-          <div class="grow min-w-0 pb-4">
-            <div class="${isSplit ? 'bg-[#E4F3FC] border-[#B9E0F5]' : 'bg-white border-slate-200/80'} rounded-2xl border shadow-xs overflow-hidden transition hover:shadow-md">
-              
-              <!-- Compact / Normal Image Banner -->
+          <!-- Main Illustrated Card -->
+          <div class="${isSplit ? 'bg-[#E4F3FC]/95 border-[#6BA8CF]/60' : 'bg-white/95 border-[#DCEBF5]'} backdrop-blur-xs rounded-2xl border shadow-sm p-3.5 sm:p-4 transition hover:shadow-md">
+            <div class="flex items-start space-x-3.5">
+              <!-- Left Circular Photo Thumbnail -->
               ${state.itineraryMode !== 'summary' ? `
-                <div class="relative h-32 sm:h-40 overflow-hidden bg-slate-900">
-                  <img src="${cardImage}" alt="${item.title}" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/20 to-transparent flex items-end p-3">
-                    <div class="flex items-center space-x-1.5">
-                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        isSplit ? 'bg-warm-500 text-white' : 'bg-fuji-700 text-white'
-                      }">
-                        ${item.type}
-                      </span>
-                      <span class="text-[10px] bg-black/50 backdrop-blur-xs text-white px-2 py-0.5 rounded-full">
-                        ${item.status}
-                      </span>
-                    </div>
+                <div class="shrink-0">
+                  <img src="${cardImage}" alt="${item.title}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-[3px] border-white shadow-sm bg-[#E4F3FC]">
+                </div>
+              ` : `
+                <div class="shrink-0 w-12 h-12 rounded-full bg-[#E4F3FC] border-2 border-white shadow-xs flex items-center justify-center text-[#17628F]">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+              `}
+
+              <!-- Right Info Content -->
+              <div class="min-w-0 flex-1 space-y-2">
+                <!-- Badges Row -->
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                    isSplit ? 'bg-[#6BA8CF] text-white' : 'bg-[#17628F] text-white'
+                  }">
+                    ${item.type}
+                  </span>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8FBFD] border border-[#DCEBF5] text-[#243F60]">
+                    ${isSplit ? 'A / B 分組' : '全體'}
+                  </span>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                    ${item.status || '已確認'}
+                  </span>
+                </div>
+
+                <!-- Title & Subtitle -->
+                <div>
+                  <h4 class="text-sm sm:text-base font-serif font-bold text-[#243F60] leading-snug">${item.title}</h4>
+                  ${item.location || item.japaneseName ? `
+                    <p class="text-[11px] text-slate-500 mt-0.5">${item.location || item.japaneseName}</p>
+                  ` : ''}
+                </div>
+
+                <!-- Highlight Summary Strip (湖水淺藍) -->
+                ${item.summary ? `
+                  <div class="bg-[#B9E0F5]/55 rounded-xl px-3 py-2 text-xs text-[#243F60] leading-relaxed">
+                    ${item.summary}
                   </div>
+                ` : ''}
+
+                <!-- Action Buttons Row -->
+                <div class="flex flex-wrap items-center gap-2 pt-0.5">
+                  ${cardMapsUrl ? `
+                    <a href="${cardMapsUrl}" target="_blank" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-[#17628F] hover:bg-[#243F60] text-white font-bold text-[11px] shadow-2xs transition">
+                      Google Maps 導航
+                    </a>
+                  ` : ''}
+                  ${cardVideoUrl ? `
+                    <button onclick="openVideoModal('${cardVideoTitle.replace(/'/g, "\\'")}', '${cardVideoUrl.replace(/'/g, "\\'")}')" class="inline-flex items-center px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold text-[11px] transition">
+                      🎬 影片
+                    </button>
+                  ` : ''}
+                  ${state.isAdminAuthenticated ? `
+                    <button onclick="openItineraryEditModal('${item.id}')" class="px-2.5 py-1.5 rounded-lg bg-[#E4F3FC] hover:bg-[#B9E0F5] text-[#17628F] font-semibold text-[11px] transition">
+                      ✏️ 編輯
+                    </button>
+                    <button onclick="openLinkAttractionModal('${item.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] transition">
+                      🔗 連動
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+
+            <!-- Collapsible Details Section -->
+            <div id="details-${item.id}" class="hidden mt-3 pt-3 border-t border-[#DCEBF5] text-xs text-[#243F60] space-y-2">
+              ${item.details ? `
+                <div class="p-2.5 bg-[#F8FBFD] rounded-xl border border-[#DCEBF5] space-y-1">
+                  <p class="font-bold text-[#243F60]">📌 詳細重點與注意事項：</p>
+                  <p class="text-[11px] text-slate-600 leading-relaxed">${item.details}</p>
                 </div>
               ` : ''}
-
-              <!-- Card Text Content -->
-              <div class="p-3.5">
-                <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1">
-                  <span class="text-[11px] font-bold text-fuji-700 flex items-center">
-                    <svg class="w-3.5 h-3.5 mr-1 text-fuji-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    時段：${item.time} (${item.duration})
-                  </span>
-                  ${state.itineraryMode === 'summary' ? `
-                    <span class="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded">${item.status}</span>
-                  ` : ''}
+              ${item.blogUrl ? `
+                <div>
+                  <a href="${item.blogUrl}" target="_blank" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-[#E4F3FC] hover:bg-[#B9E0F5] text-[#17628F] font-bold text-[11px] transition">
+                    📖 開啟參考攻略 / 介紹網頁 ↗
+                  </a>
                 </div>
-
-                <h4 class="text-sm font-bold text-slate-900 tracking-tight leading-snug">${item.title}</h4>
-                <p class="text-[11px] text-slate-400 font-normal">${item.japaneseName}</p>
-
-                <p class="text-xs text-slate-600 mt-2 leading-relaxed">
-                  ${item.summary}
-                </p>
-
-                <!-- Collapsible Details -->
-                <div id="details-${item.id}" class="hidden mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600 space-y-2">
-                  <div class="p-2.5 bg-slate-50 rounded-xl space-y-1">
-                    <p class="font-semibold text-slate-800">📌 詳細重點與注意事項：</p>
-                    <p class="text-[11px] text-slate-600 leading-relaxed">${item.details}</p>
+              ` : ''}
+              ${linkedAtt ? `
+                <div class="p-2.5 bg-[#E4F3FC]/70 border border-[#B9E0F5] rounded-xl space-y-1">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-[#17628F]">🔗 已連動景點：${linkedAtt.name}</span>
+                    <span class="text-[10px] text-[#243F60] font-semibold">${linkedAtt.cost || ''}</span>
                   </div>
-                  <div class="flex items-center text-[11px] text-slate-500">
-                    <span class="font-semibold text-slate-700 mr-1">集合地點：</span>
-                    <span>${item.location}</span>
-                  </div>
-                  ${linkedAtt ? `
-                    <div class="p-2.5 bg-sky-50/70 border border-sky-200/80 rounded-xl space-y-1">
-                      <div class="flex items-center justify-between">
-                        <span class="text-[11px] font-bold text-sky-900">🔗 已連動景點：${linkedAtt.name}</span>
-                        <span class="text-[10px] text-sky-700 font-semibold">${linkedAtt.cost || ''}</span>
-                      </div>
-                      <p class="text-[11px] text-sky-800 leading-relaxed">${linkedAtt.shortDesc || ''}</p>
-                    </div>
-                  ` : ''}
-                  ${isSplit ? `
-                    <div class="mt-2 p-2.5 bg-[#B9E0F5]/60 border border-[#6BA8CF]/50 rounded-xl flex items-center justify-between">
-                      <div>
-                        <span class="text-[#243F60] font-bold text-xs block">本活動存在 A/B 分組選擇</span>
-                        <span class="text-[11px] text-[#17628F]">可自由挑選喜歡的路線方案</span>
-                      </div>
-                      <button onclick="switchView('groups')" class="px-2.5 py-1.5 bg-[#17628F] text-white rounded-lg text-xs font-semibold hover:bg-[#243F60] transition shadow-xs shrink-0 ml-2">
-                        前往分組登記
-                      </button>
-                    </div>
-                  ` : ''}
+                  <p class="text-[11px] text-[#243F60] leading-relaxed">${linkedAtt.shortDesc || ''}</p>
                 </div>
-
-                <!-- Action Bar -->
-                <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <button onclick="toggleCardDetails('${item.id}')" class="text-fuji-700 hover:text-fuji-800 font-medium flex items-center" id="toggleBtn-${item.id}">
-                    <span>查看詳情</span>
-                    <svg class="w-3.5 h-3.5 ml-0.5 transform transition" id="arrow-${item.id}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+              ` : ''}
+              ${isSplit ? `
+                <div class="p-2.5 bg-[#B9E0F5]/60 border border-[#6BA8CF]/50 rounded-xl flex items-center justify-between">
+                  <div>
+                    <span class="text-[#243F60] font-bold text-xs block">本活動包含 A / B 分組名單</span>
+                    <span class="text-[11px] text-[#17628F]">點擊查看各組參與成員</span>
+                  </div>
+                  <button onclick="switchView('groups')" class="px-2.5 py-1.5 bg-[#17628F] text-white rounded-lg text-xs font-semibold hover:bg-[#243F60] transition shadow-xs shrink-0 ml-2">
+                    查看分組名單
                   </button>
-
-                  <div class="flex items-center space-x-1.5">
-                    ${cardVideoUrl ? `
-                      <button onclick="openVideoModal('${cardVideoTitle.replace(/'/g, "\\'")}', '${cardVideoUrl.replace(/'/g, "\\'")}')" class="px-2 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold transition flex items-center text-[11px]">
-                        🎬 影片
-                      </button>
-                    ` : ''}
-                    ${state.isAdminAuthenticated ? `
-                      <button onclick="openItineraryEditModal('${item.id}')" class="px-2 py-1 rounded-lg bg-fuji-50 hover:bg-fuji-100 text-fuji-700 font-semibold transition text-[11px]" title="編輯此行程內容">
-                        ✏️ 編輯
-                      </button>
-                      <button onclick="openLinkAttractionModal('${item.id}')" class="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition text-[11px]" title="設定連動景點或圖片">
-                        🔗 連動
-                      </button>
-                    ` : ''}
-                    <a href="${cardMapsUrl}" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center text-[11px]">
-                      <svg class="w-3.5 h-3.5 mr-1 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      </svg>
-                      Google Maps
-                    </a>
-                  </div>
                 </div>
+              ` : ''}
+            </div>
 
-              </div>
+            <!-- Details Toggle Footer -->
+            <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between">
+              <button onclick="toggleCardDetails('${item.id}')" class="text-[#17628F] hover:text-[#243F60] font-bold text-[11px] flex items-center" id="toggleBtn-${item.id}">
+                <svg class="w-3.5 h-3.5 mr-1 transform transition -rotate-90" id="arrow-${item.id}" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+                <span>活動詳情</span>
+              </button>
+              <span class="font-hand text-xs text-slate-400">Stop ${index + 1}</span>
             </div>
           </div>
         `;
@@ -2941,12 +2844,12 @@
       if (el) {
         if (el.classList.contains('hidden')) {
           el.classList.remove('hidden');
-          arrow.classList.add('rotate-180');
-          btn.querySelector('span').textContent = '收合資訊';
+          arrow.classList.remove('-rotate-90');
+          btn.querySelector('span').textContent = '收合詳情';
         } else {
           el.classList.add('hidden');
-          arrow.classList.remove('rotate-180');
-          btn.querySelector('span').textContent = '查看詳情';
+          arrow.classList.add('-rotate-90');
+          btn.querySelector('span').textContent = '活動詳情';
         }
       }
     }
@@ -3334,17 +3237,10 @@
       reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
-          const maxW = 720;
-          const scale = img.width > maxW ? (maxW / img.width) : 1;
-          const canvas = document.createElement('canvas');
-          canvas.width = Math.round(img.width * scale);
-          canvas.height = Math.round(img.height * scale);
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.78);
+          const dataUrl = compressImageToSheetSafeDataUrl(img);
           document.getElementById('attEditImgUrl').value = dataUrl;
           document.getElementById('attEditImgPreview').src = dataUrl;
-          showToast('已載入並最佳化圖片，記得按「儲存並同步」！', 'info');
+          showToast('已載入並最佳化圖片（可同步至 Google 試算表），記得按「儲存並同步」！', 'info');
         };
         img.src = e.target.result;
       };
@@ -3364,6 +3260,24 @@
       }) || null;
     }
 
+    function compressImageToSheetSafeDataUrl(img) {
+      let maxW = 540;
+      let quality = 0.7;
+      let dataUrl = '';
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const scale = img.width > maxW ? (maxW / img.width) : 1;
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        dataUrl = canvas.toDataURL('image/jpeg', quality);
+        if (dataUrl.length <= 45000) break;
+        maxW = Math.round(maxW * 0.8);
+        quality = Math.max(0.45, quality - 0.1);
+      }
+      return dataUrl;
+    }
+
     function handleItineraryImageUpload(event) {
       const file = event.target.files && event.target.files[0];
       if (!file) return;
@@ -3371,17 +3285,10 @@
       reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
-          const maxW = 600;
-          const scale = img.width > maxW ? (maxW / img.width) : 1;
-          const canvas = document.createElement('canvas');
-          canvas.width = Math.round(img.width * scale);
-          canvas.height = Math.round(img.height * scale);
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.72);
+          const dataUrl = compressImageToSheetSafeDataUrl(img);
           document.getElementById('itEditImgUrl').value = dataUrl;
           document.getElementById('itEditImgPreview').src = dataUrl;
-          showToast('已載入並壓縮圖片，記得按「儲存並同步」！', 'info');
+          showToast('已載入並最佳化圖片（可同步至 Google 試算表），記得按「儲存並同步」！', 'info');
         };
         img.src = e.target.result;
       };
@@ -4815,7 +4722,7 @@
 
       try {
         updateCloudBadge('同步中...', false);
-        const res = await fetch(url);
+        const res = await fetch(url + (url.includes('?') ? '&' : '?') + '_t=' + Date.now(), { cache: 'no-store' });
         const data = await res.json();
         if (data.status === 'ok') {
           if (Array.isArray(data.itinerary) && data.itinerary.length > 0) {
@@ -4824,7 +4731,8 @@
             DEFAULT_ITINERARY.forEach(d => { defaultImgMap[d.id] = d.image; });
             state.itinerary = data.itinerary.map(item => ({
               ...item,
-              image: item.image || defaultImgMap[item.id] || APP_IMAGES.fuji
+              hasCustomImage: Boolean(item.image && String(item.image).trim()),
+              image: (item.image && String(item.image).trim()) ? item.image : (defaultImgMap[item.id] || APP_IMAGES.fuji)
             }));
             saveState('itinerary', state.itinerary);
             renderItinerary();
@@ -4897,14 +4805,23 @@
       const url = getGasApiUrl();
       if (!url) return;
       try {
-        await fetch(url, {
+        updateCloudBadge('寫入雲端中...', false);
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         });
-        updateCloudBadge('☁️ 已同步', true);
+        const data = await res.json();
+        if (data && data.status === 'ok') {
+          updateCloudBadge('☁️ 已同步', true);
+        } else {
+          updateCloudBadge('寫入異常', false);
+          showToast('Google 試算表寫入異常：' + (data?.message || '請確認 Code.gs 已部署最新版本'), 'warn');
+        }
       } catch (err) {
+        updateCloudBadge('寫入失敗', false);
         console.warn('Cloud POST failed:', err);
+        showToast('無法寫入 Google 試算表，請確認網路或 Code.gs 部署權限', 'warn');
       }
     }
 
