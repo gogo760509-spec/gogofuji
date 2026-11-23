@@ -3549,6 +3549,21 @@
       });
     }
 
+    function parseYouTubeStartSeconds(u) {
+      const m = u.match(/[?&#](?:t|start)=([0-9hms]+)/i);
+      if (!m) return 0;
+      const raw = m[1].toLowerCase();
+      if (/^\d+$/.test(raw)) return parseInt(raw, 10);
+      let sec = 0;
+      const h = raw.match(/(\d+)h/);
+      const min = raw.match(/(\d+)m/);
+      const s = raw.match(/(\d+)s/);
+      if (h) sec += parseInt(h[1], 10) * 3600;
+      if (min) sec += parseInt(min[1], 10) * 60;
+      if (s) sec += parseInt(s[1], 10);
+      return sec;
+    }
+
     function normalizeVideoEmbedUrl(url) {
       if (!url) return { type: 'none', embedUrl: '', rawUrl: '' };
       const u = url.trim();
@@ -3566,7 +3581,9 @@
       else if (m3) ytId = m3[1];
       else if (m4) ytId = m4[1];
       if (ytId) {
-        return { type: 'yt', embedUrl: `https://www.youtube.com/embed/${ytId}`, rawUrl: u };
+        const startSec = parseYouTubeStartSeconds(u);
+        const query = startSec > 0 ? `?start=${startSec}&autoplay=1` : '';
+        return { type: 'yt', embedUrl: `https://www.youtube.com/embed/${ytId}${query}`, rawUrl: u };
       }
       return { type: 'other', embedUrl: u, rawUrl: u };
     }
