@@ -418,27 +418,39 @@
     <!-- ============================================== -->
     <section id="view-itinerary" class="view-panel hidden space-y-4">
       
-      <!-- DAY TABS (HORIZONTAL SCROLLABLE) -->
-      <div class="bg-white p-1.5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between space-x-1 overflow-x-auto no-scrollbar">
-        <button onclick="selectItineraryDay(1)" id="dayTab-1" class="day-tab-btn flex-1 min-w-[64px] py-2 px-2.5 rounded-xl text-center transition">
+      <!-- DAY TABS (ALL 8 DAYS: 12/11 ~ 12/18) -->
+      <div class="bg-white p-1.5 rounded-2xl border border-[#DCEBF5] shadow-xs grid grid-cols-4 sm:grid-cols-8 gap-1">
+        <button onclick="selectItineraryDay(1)" id="dayTab-1" class="day-tab-btn py-2 px-1.5 rounded-xl text-center transition">
           <div class="text-[10px] text-slate-400 font-medium">12/11 (五)</div>
-          <div class="text-xs font-bold text-slate-800">DAY 1</div>
+          <div class="text-xs font-bold text-[#243F60]">DAY 1</div>
         </button>
-        <button onclick="selectItineraryDay(2)" id="dayTab-2" class="day-tab-btn flex-1 min-w-[64px] py-2 px-2.5 rounded-xl text-center transition">
+        <button onclick="selectItineraryDay(2)" id="dayTab-2" class="day-tab-btn py-2 px-1.5 rounded-xl text-center transition">
           <div class="text-[10px] text-slate-400 font-medium">12/12 (六)</div>
-          <div class="text-xs font-bold text-slate-800">DAY 2</div>
+          <div class="text-xs font-bold text-[#243F60]">DAY 2</div>
         </button>
-        <button onclick="selectItineraryDay(3)" id="dayTab-3" class="day-tab-btn flex-1 min-w-[64px] py-2 px-2.5 rounded-xl text-center transition">
+        <button onclick="selectItineraryDay(3)" id="dayTab-3" class="day-tab-btn py-2 px-1.5 rounded-xl text-center transition">
           <div class="text-[10px] text-slate-400 font-medium">12/13 (日)</div>
-          <div class="text-xs font-bold text-slate-800">DAY 3</div>
+          <div class="text-xs font-bold text-[#243F60]">DAY 3</div>
         </button>
-        <button onclick="selectItineraryDay(4)" id="dayTab-4" class="day-tab-btn flex-1 min-w-[64px] py-2 px-2.5 rounded-xl text-center transition">
+        <button onclick="selectItineraryDay(4)" id="dayTab-4" class="day-tab-btn py-2 px-1.5 rounded-xl text-center transition">
           <div class="text-[10px] text-slate-400 font-medium">12/14 (一)</div>
-          <div class="text-xs font-bold text-slate-800">DAY 4</div>
+          <div class="text-xs font-bold text-[#243F60]">DAY 4</div>
         </button>
-        <button onclick="selectItineraryDay(5)" id="dayTab-5" class="day-tab-btn flex-1 min-w-[64px] py-2 px-2.5 rounded-xl text-center transition">
+        <button onclick="selectItineraryDay(5)" id="dayTab-5" class="day-tab-btn py-2 px-1.5 rounded-xl text-center transition">
           <div class="text-[10px] text-slate-400 font-medium">12/15 (二)</div>
-          <div class="text-xs font-bold text-slate-800">DAY 5</div>
+          <div class="text-xs font-bold text-[#243F60]">DAY 5</div>
+        </button>
+        <button onclick="selectItineraryDay(6)" id="dayTab-6" class="day-tab-btn py-2 px-1.5 rounded-xl text-center transition">
+          <div class="text-[10px] text-slate-400 font-medium">12/16 (三)</div>
+          <div class="text-xs font-bold text-[#243F60]">DAY 6</div>
+        </button>
+        <button onclick="selectItineraryDay(7)" id="dayTab-7" class="day-tab-btn py-2 px-1.5 rounded-xl text-center transition">
+          <div class="text-[10px] text-slate-400 font-medium">12/17 (四)</div>
+          <div class="text-xs font-bold text-[#243F60]">DAY 7</div>
+        </button>
+        <button onclick="selectItineraryDay(8)" id="dayTab-8" class="day-tab-btn py-2 px-1.5 rounded-xl text-center transition">
+          <div class="text-[10px] text-slate-400 font-medium">12/18 (五)</div>
+          <div class="text-xs font-bold text-[#243F60]">DAY 8</div>
         </button>
       </div>
 
@@ -2716,8 +2728,11 @@
             <div class="flex items-start space-x-3.5">
               <!-- Left Circular Photo Thumbnail -->
               ${state.itineraryMode !== 'summary' ? `
-                <div class="shrink-0">
-                  <img src="${cardImage}" alt="${item.title}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-[3px] border-white shadow-sm bg-[#E4F3FC]">
+                <div class="shrink-0 relative ${state.isAdminAuthenticated ? 'cursor-pointer group' : ''}" ${state.isAdminAuthenticated ? `onclick="openItineraryEditModal('${item.id}')" title="點擊更換這張圖片"` : ''}>
+                  <img src="${cardImage}" alt="${item.title}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-[3px] border-white shadow-sm bg-[#E4F3FC] ${state.isAdminAuthenticated ? 'group-hover:brightness-90 transition' : ''}">
+                  ${state.isAdminAuthenticated ? `
+                    <span class="absolute -bottom-0.5 -right-0.5 w-6 h-6 rounded-full bg-[#17628F] text-white text-[11px] flex items-center justify-center border-2 border-white shadow-xs">📷</span>
+                  ` : ''}
                 </div>
               ` : `
                 <div class="shrink-0 w-12 h-12 rounded-full bg-[#E4F3FC] border-2 border-white shadow-xs flex items-center justify-center text-[#17628F]">
@@ -4852,7 +4867,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       renderMemberChips();
-      renderItinerary();
+      selectItineraryDay(state.activeDay);
       renderGroupsView();
       updateHomeAlert();
       setInterval(updateCountdown, 1000);
